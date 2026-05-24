@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<!-- saved from url=(0073)file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html# -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KRITHI AI — Shop Smarter with AI</title>
+<meta name="description" content="India&#39;s AI-powered e-commerce platform with personalized deals and 24x7 KRITHI Care support.">
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link href="./KRITHI AI — Shop Smarter with AI_files/css2" rel="stylesheet">
+<link rel="stylesheet" href="./KRITHI AI — Shop Smarter with AI_files/style.css">
+</head>
+<body>
+
+<nav class="navbar" id="navbar">
+<div class="nav-inner">
+<div class="nav-left">
+<a href="file:///C:/" class="logo" title="KRITHI AI Home" aria-label="KRITHI AI Home">
+<span class="logo-k">K</span><span class="logo-rest">RITHI</span>
+<span class="logo-ai">AI</span>
+</a>
+<div class="location-bar">
+<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+<span>Deliver to <b>Chennai 600001</b></span>
+</div>
+</div>
+<div class="nav-center">
+<div class="search-box">
+<span class="search-ai-badge">AI</span>
+<input type="text" id="searchInput" placeholder="Search for products, brands and more..." oninput="handleSearch(this.value)">
+<button class="search-btn" onclick="doSearch()" aria-label="Search" title="Search">
+<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
+</button>
+</div>
+</div>
+<div class="nav-right">
+<div class="nav-item login-dropdown" id="loginDropdown">
+<button class="nav-btn" onclick="toggleDropdown(&#39;loginMenu&#39;)">
+<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+<span id="navUserName">Login</span>
+<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+</button>
+<div class="dropdown-menu" id="loginMenu">
+<div class="dropdown-header" id="dropdownHeader"><span>New customer?</span> <a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#" onclick="showModal(&#39;registerModal&#39;)" class="signup-link">Sign Up</a></div>
+<a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#" onclick="showModal(&#39;loginModal&#39;)" class="dropdown-item"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> My Profile</a>
+<a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#" onclick="showSection(&#39;orders&#39;)" class="dropdown-item"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="5" rx="2"></rect><path d="M2 10h20"></path></svg> Orders</a>
+<a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#" onclick="showSection(&#39;wishlist&#39;)" class="dropdown-item"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg> Wishlist</a>
+<a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#" class="dropdown-item loyalty"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> KRITHI Plus Zone</a>
+<a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#" class="dropdown-item"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M9 9h.01M15 9h.01M9 15h.01M15 15h.01"></path></svg> Rewards</a>
+<div class="dropdown-divider"></div>
+<a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#support" class="dropdown-item"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.15 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.06 2h3a2 2 0 0 1 2 1.72v.1a16 16 0 0 0 .87 3.41 2 2 0 0 1-.45 2.11L7.91 10.6a16 16 0 0 0 6.4 6.4l1.36-.5a2 2 0 0 1 2.11.45 16 16 0 0 0 3.41.87 2 2 0 0 1 1.81 2z"></path></svg> 24x7 Customer Care</a>
+<a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#" id="logoutBtn" class="dropdown-item hidden" onclick="logout()"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg> Logout</a>
+</div>
+</div>
+<div class="nav-item">
+<button class="nav-btn" onclick="toggleDropdown(&#39;moreMenu&#39;)">More <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+<div class="dropdown-menu" id="moreMenu">
+<a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#" class="dropdown-item"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="7" rx="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg> Become a Seller</a>
+<a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#" class="dropdown-item"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg> Notification Settings</a>
+<a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#" onclick="openChat()" class="dropdown-item"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.15 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.06 2h3a2 2 0 0 1 2 1.72v.1a16 16 0 0 0 .87 3.41 2 2 0 0 1-.45 2.11L7.91 10.6a16 16 0 0 0 6.4 6.4l1.36-.5a2 2 0 0 1 2.11.45 16 16 0 0 0 3.41.87 2 2 0 0 1 1.81 2z"></path></svg> 24x7 KRITHI Care</a>
+<a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#" class="dropdown-item"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="5" rx="2"></rect><path d="M2 10h20"></path></svg> Advertise on KRITHI AI</a>
+<a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#admin" onclick="showModal(&#39;adminLoginModal&#39;);return false" class="dropdown-item admin-link"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg> Dashboard</a>
+</div>
+</div>
+<button class="cart-btn" onclick="showSection(&#39;cart&#39;)" id="cartBtn">
+<svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+Cart <span class="cart-count" id="cartCount">0</span>
+</button>
+<button class="nav-btn hidden" id="navLogoutBtn" onclick="logout()" title="Logout">
+<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+</button>
+</div>
+</div>
+</nav>
+
+<div class="cat-bar" id="catBar">
+<div class="cat-inner">
+<div class="cat-item active" onclick="filterCategory(&#39;all&#39;, this)"><div class="cat-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div><span>Home</span></div>
+<div class="cat-item" onclick="filterCategory(&#39;fashion&#39;, this)"><div class="cat-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5l3-3h6l3 3-4 4v10l-2 2-2-2V9L6 5z"></path></svg></div><span>Fashion</span></div>
+<div class="cat-item" onclick="filterCategory(&#39;mobiles&#39;, this)"><div class="cat-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg></div><span>Mobiles</span></div>
+<div class="cat-item" onclick="filterCategory(&#39;beauty&#39;, this)"><div class="cat-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l1.5 6.5L20 10l-6.5 1.5L12 18l-1.5-6.5L4 10l6.5-1.5L12 2z"></path><path d="M18 14l.5 2 2 .5-2 .5-.5 2-.5-2-2-.5 2-.5.5-2z"></path></svg></div><span>Beauty</span></div>
+<div class="cat-item" onclick="filterCategory(&#39;electronics&#39;, this)"><div class="cat-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg></div><span>Electronics</span></div>
+<div class="cat-item" onclick="filterCategory(&#39;appliances&#39;, this)"><div class="cat-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6v6"></path><path d="M8 6v6"></path><path d="M4 12h16v2a4 4 0 0 1-4 4h-8a4 4 0 0 1-4-4z"></path><line x1="10" y1="18" x2="10" y2="22"></line><line x1="14" y1="18" x2="14" y2="22"></line></svg></div><span>Appliances</span></div>
+<div class="cat-item" onclick="filterCategory(&#39;toys&#39;, this)"><div class="cat-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg></div><span>Toys &amp; Baby</span></div>
+<div class="cat-item" onclick="filterCategory(&#39;food&#39;, this)"><div class="cat-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.94c-1.05.52-2.68 1.06-5 1.06-3 0-5.5-1.5-6-4 0 0 4-1.5 4-5.5C5 7.5 6 3 12 3c6 0 7 4.5 7 9.5 0 4-1 6-4 7.5"></path><path d="M12 20.94C13.05 21.46 14.68 22 17 22c3 0 5.5-1.5 6-4 0 0-4-1.5-4-5.5"></path><path d="M9 9c1.5-1 3-1 4.5 0"></path><path d="M9 12c2-1 4-1 6 0"></path></svg></div><span>Food &amp; Health</span></div>
+<div class="cat-item" onclick="filterCategory(&#39;sports&#39;, this)"><div class="cat-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"></circle><path d="M15.5 13.5L14 21l-2-2-2 2-1.5-7.5"></path><path d="M10 12l-1-4 3-1 3 1-1 4"></path></svg></div><span>Sports</span></div>
+<div class="cat-item" onclick="filterCategory(&#39;books&#39;, this)"><div class="cat-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path><line x1="8" y1="7" x2="16" y2="7"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg></div><span>Books</span></div>
+<div class="cat-item" onclick="filterCategory(&#39;furniture&#39;, this)"><div class="cat-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3"></path><path d="M4 11v5a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v1H8v-1a2 2 0 0 0-4 0z"></path><path d="M4 16v2"></path><path d="M20 16v2"></path></svg></div><span>Furniture</span></div>
+</div>
+</div>
+
+<main id="mainContent">
+
+<section id="homeSection">
+<div class="banner-section">
+<div class="banner-slider" id="bannerSlider">
+<div class="banner-slide active">
+<div class="banner-content">
+<div class="banner-badge"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> AI-Powered Deals</div>
+<h1>KRITHI AI</h1>
+<p>Shop Smarter. Save Bigger.</p>
+<p class="banner-sub">Personalized deals curated by AI just for you</p>
+<button class="banner-cta" onclick="filterCategory(&#39;all&#39;,null)">Shop Now →</button>
+</div>
+<div class="banner-visual">
+<div class="floating-card">
+<span><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg> AI Pick for You</span>
+<strong>iPhone 15 Pro</strong>
+<em>₹1,19,900 — Today only!</em>
+</div>
+</div>
+</div>
+<div class="banner-slide flash-sale">
+<div class="banner-content dark">
+<div class="banner-badge flash-badge"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg> Flash Sale</div>
+<h1>Electronics Week</h1>
+<p>Up to 60% OFF</p>
+<p class="banner-sub">Top brands — Samsung, Apple, Sony &amp; more</p>
+<button class="banner-cta dark" onclick="filterCategory(&#39;electronics&#39;,null)">Grab Deals →</button>
+</div>
+</div>
+<div class="banner-slide fashion-slide">
+<div class="banner-content">
+<div class="banner-badge"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5l3-3h6l3 3-4 4v10l-2 2-2-2V9L6 5z"></path></svg> Fashion Week</div>
+<h1>Style Season</h1>
+<p>Trendy Picks at ₹499</p>
+<p class="banner-sub">Nike • Levi's • Zara • H&amp;M &amp; more</p>
+<button class="banner-cta" onclick="filterCategory(&#39;fashion&#39;,null)">Explore Fashion →</button>
+</div>
+</div>
+</div>
+<div class="slider-dots" id="sliderDots">
+<span class="dot active" onclick="goToSlide(0)"></span>
+<span class="dot" onclick="goToSlide(1)"></span>
+<span class="dot" onclick="goToSlide(2)"></span>
+</div>
+<button class="slider-prev" onclick="prevSlide()">❮</button>
+<button class="slider-next" onclick="nextSlide()">❯</button>
+</div>
+
+<div class="ai-strip">
+<div class="ai-strip-inner">
+<div class="ai-badge-big"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> KRITHI AI</div>
+<div class="ai-strip-items">
+<div class="ai-strip-item"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> Curated for You</div>
+<div class="ai-strip-item"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"></path></svg> Smart Suggestions</div>
+<div class="ai-strip-item"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg> Price Alerts</div>
+<div class="ai-strip-item"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> 100% Secure</div>
+<div class="ai-strip-item"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg> Free Shipping ₹500+</div>
+<div class="ai-strip-item"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg> Easy Returns</div>
+</div>
+</div>
+</div>
+
+<div id="homeFeatureSections">
+<div class="deal-section">
+<div class="deal-header">
+<div class="deal-title-wrap">
+<span class="deal-badge">⚡ Deal of the Day</span>
+<h3>Today's Biggest Offers</h3>
+</div>
+<div class="deal-timer" id="dealTimer">⏱ Ends in <span id="countdownDisplay">07h 59m 27s</span></div>
+</div>
+<div class="deal-grid" id="dealGrid"><div class="deal-card" onclick="showProductDetail(1)"><div class="deal-discount">-43%</div><img class="deal-img" src="./KRITHI AI — Shop Smarter with AI_files/photo-1572804013309-59a88b7e92f1" alt="Crystal Embroidered Dress" loading="lazy"><div class="deal-name">Crystal Embroidered </div><div class="deal-price"><span class="deal-curr">₹2,499</span> <span class="deal-orig">₹4,384</span></div></div><div class="deal-card" onclick="showProductDetail(2)"><div class="deal-discount">-33%</div><img class="deal-img" src="./KRITHI AI — Shop Smarter with AI_files/photo-1595777457583-95e059d581b8" alt="Tailored Blazer &amp; Trousers" loading="lazy"><div class="deal-name">Tailored Blazer &amp; Tr</div><div class="deal-price"><span class="deal-curr">₹3,999</span> <span class="deal-orig">₹5,969</span></div></div><div class="deal-card" onclick="showProductDetail(3)"><div class="deal-discount">-15%</div><img class="deal-img" src="./KRITHI AI — Shop Smarter with AI_files/photo-1525507119028-ed4c629a60a3" alt="Pure Cashmere Wrap" loading="lazy"><div class="deal-name">Pure Cashmere Wrap</div><div class="deal-price"><span class="deal-curr">₹4,999</span> <span class="deal-orig">₹5,881</span></div></div><div class="deal-card" onclick="showProductDetail(4)"><div class="deal-discount">-20%</div><img class="deal-img" src="./KRITHI AI — Shop Smarter with AI_files/photo-1601924994987-69e26d50dc26" alt="Artisan Silk Scarf" loading="lazy"><div class="deal-name">Artisan Silk Scarf</div><div class="deal-price"><span class="deal-curr">₹1,299</span> <span class="deal-orig">₹1,624</span></div></div><div class="deal-card" onclick="showProductDetail(5)"><div class="deal-discount">-38%</div><img class="deal-img" src="./KRITHI AI — Shop Smarter with AI_files/photo-1599488615731-7e5c2823f3c5" alt="iPhone 15 Pro Max" loading="lazy"><div class="deal-name">iPhone 15 Pro Max</div><div class="deal-price"><span class="deal-curr">₹119,900</span> <span class="deal-orig">₹193,387</span></div></div><div class="deal-card" onclick="showProductDetail(6)"><div class="deal-discount">-24%</div><img class="deal-img" src="./KRITHI AI — Shop Smarter with AI_files/photo-1610945265064-0e34e5519bbf" alt="Samsung Galaxy S24 Ultra" loading="lazy"><div class="deal-name">Samsung Galaxy S24 U</div><div class="deal-price"><span class="deal-curr">₹109,999</span> <span class="deal-orig">₹144,736</span></div></div><div class="deal-card" onclick="showProductDetail(7)"><div class="deal-discount">-24%</div><img class="deal-img" src="./KRITHI AI — Shop Smarter with AI_files/photo-1598327105743-74b86e9b7e6e" alt="OnePlus 12" loading="lazy"><div class="deal-name">OnePlus 12</div><div class="deal-price"><span class="deal-curr">₹69,999</span> <span class="deal-orig">₹92,104</span></div></div><div class="deal-card" onclick="showProductDetail(8)"><div class="deal-discount">-18%</div><img class="deal-img" src="./KRITHI AI — Shop Smarter with AI_files/photo-1592899677977-9c10ca588bbd" alt="Pixel 8 Pro" loading="lazy"><div class="deal-name">Pixel 8 Pro</div><div class="deal-price"><span class="deal-curr">₹79,999</span> <span class="deal-orig">₹97,560</span></div></div></div>
+<div class="deal-bar">
+<span>🔥 Limited stock — Prices drop daily at midnight</span>
+<a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#" onclick="filterCategory(&#39;electronics&#39;,null)" class="deal-view-all">View All Deals →</a>
+</div>
+</div>
+
+<div class="cat-grid-section">
+<div class="section-header"><h2>📂 Shop by Category</h2></div>
+<div class="cat-grid" id="catGrid">
+<div class="cat-card" onclick="filterCategory(&#39;fashion&#39;,null)" style="background-image:linear-gradient(rgba(10,10,15,.7),rgba(10,10,15,.85)),url(https://images.unsplash.com/photo-1445205170230-053b83016050?w=300&amp;h=200&amp;fit=crop);background-size:cover;background-position:center"><span>Fashion</span><small>Up to 70% off</small></div>
+<div class="cat-card" onclick="filterCategory(&#39;electronics&#39;,null)" style="background-image:linear-gradient(rgba(10,10,15,.7),rgba(10,10,15,.85)),url(https://images.unsplash.com/photo-1498049794561-7780e7231661?w=300&amp;h=200&amp;fit=crop);background-size:cover;background-position:center"><span>Electronics</span><small>Latest gadgets</small></div>
+<div class="cat-card" onclick="filterCategory(&#39;mobiles&#39;,null)" style="background-image:linear-gradient(rgba(10,10,15,.7),rgba(10,10,15,.85)),url(https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=300&amp;h=200&amp;fit=crop);background-size:cover;background-position:center"><span>Mobiles</span><small>Top brands</small></div>
+<div class="cat-card" onclick="filterCategory(&#39;home&#39;,null)" style="background-image:linear-gradient(rgba(10,10,15,.7),rgba(10,10,15,.85)),url(https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=300&amp;h=200&amp;fit=crop);background-size:cover;background-position:center"><span>Home</span><small>Decor &amp; more</small></div>
+<div class="cat-card" onclick="filterCategory(&#39;beauty&#39;,null)" style="background-image:linear-gradient(rgba(10,10,15,.7),rgba(10,10,15,.85)),url(https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=300&amp;h=200&amp;fit=crop);background-size:cover;background-position:center"><span>Beauty</span><small>Top picks</small></div>
+<div class="cat-card" onclick="filterCategory(&#39;sports&#39;,null)" style="background-image:linear-gradient(rgba(10,10,15,.7),rgba(10,10,15,.85)),url(https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300&amp;h=200&amp;fit=crop);background-size:cover;background-position:center"><span>Sports</span><small>Active wear</small></div>
+<div class="cat-card" onclick="filterCategory(&#39;books&#39;,null)" style="background-image:linear-gradient(rgba(10,10,15,.7),rgba(10,10,15,.85)),url(https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=300&amp;h=200&amp;fit=crop);background-size:cover;background-position:center"><span>Books</span><small>Bestsellers</small></div>
+<div class="cat-card" onclick="filterCategory(&#39;furniture&#39;,null)" style="background-image:linear-gradient(rgba(10,10,15,.7),rgba(10,10,15,.85)),url(https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=300&amp;h=200&amp;fit=crop);background-size:cover;background-position:center"><span>Furniture</span><small>New arrivals</small></div>
+</div>
+</div>
+
+<div class="brands-section">
+<div class="section-header"><h2>🏷️ Top Brands</h2></div>
+<div class="brands-strip" id="brandsStrip">
+<div class="brand-item" onclick="filterBrand(&#39;Apple&#39;,this)"><span class="brand-logo-wrap">A</span> <span>Apple</span></div>
+<div class="brand-item" onclick="filterBrand(&#39;Samsung&#39;,this)"><span class="brand-logo-wrap">S</span> <span>Samsung</span></div>
+<div class="brand-item" onclick="filterBrand(&#39;Nike&#39;,this)"><span class="brand-logo-wrap">N</span> <span>Nike</span></div>
+<div class="brand-item" onclick="filterBrand(&#39;Sony&#39;,this)"><span class="brand-logo-wrap">S</span> <span>Sony</span></div>
+<div class="brand-item" onclick="filterBrand(&#39;LG&#39;,this)"><span class="brand-logo-wrap">L</span> <span>LG</span></div>
+<div class="brand-item" onclick="filterBrand(&#39;Xiaomi&#39;,this)"><span class="brand-logo-wrap">X</span> <span>Xiaomi</span></div>
+<div class="brand-item" onclick="filterBrand(&#39;Canon&#39;,this)"><span class="brand-logo-wrap">C</span> <span>Canon</span></div>
+<div class="brand-item" onclick="filterBrand(&#39;Puma&#39;,this)"><span class="brand-logo-wrap">P</span> <span>Puma</span></div>
+</div>
+</div>
+
+<div class="testimonials-section" id="testimonialsSection">
+<div class="section-header"><h2>⭐ What Our Customers Say</h2></div>
+<div class="testimonials-grid" id="testimonialsGrid">
+<div class="testimonial-card"><div class="testimonial-stars">★★★★★</div><p class="testimonial-text">"The AI recommendations are incredible! Found exactly what I needed in seconds."</p><div class="testimonial-author"><img class="testimonial-avatar" src="./KRITHI AI — Shop Smarter with AI_files/photo-1494790108377-be9c29b29330" alt="Priya" loading="lazy"><div><strong>Priya S.</strong><span>Verified Buyer</span></div></div></div>
+<div class="testimonial-card"><div class="testimonial-stars">★★★★★</div><p class="testimonial-text">"Fast delivery and great prices. The KRITHI Care chat helped me with my order instantly."</p><div class="testimonial-author"><img class="testimonial-avatar" src="./KRITHI AI — Shop Smarter with AI_files/photo-1507003211169-0a1dd7228f2d" alt="Rahul" loading="lazy"><div><strong>Rahul K.</strong><span>Verified Buyer</span></div></div></div>
+<div class="testimonial-card"><div class="testimonial-stars">★★★★★</div><p class="testimonial-text">"Easy returns and excellent customer service. My go-to shopping platform now!"</p><div class="testimonial-author"><img class="testimonial-avatar" src="./KRITHI AI — Shop Smarter with AI_files/photo-1438761681033-6461ffad8d80" alt="Ananya" loading="lazy"><div><strong>Ananya M.</strong><span>KRITHI Plus Member</span></div></div></div>
+<div class="testimonial-card"><div class="testimonial-stars">★★★★☆</div><p class="testimonial-text">"Love the AI-powered search! It understands exactly what I'm looking for, even with vague terms."</p><div class="testimonial-author"><img class="testimonial-avatar" src="./KRITHI AI — Shop Smarter with AI_files/photo-1472099645785-5658abf4ff4e" alt="Vikram" loading="lazy"><div><strong>Vikram P.</strong><span>Premium User</span></div></div></div>
+</div>
+</div>
+
+<div class="features-section">
+<div class="features-grid">
+<div class="feature-card"><div class="feature-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div><h4>AI Curated</h4><p>Personalized recommendations powered by machine learning</p></div>
+<div class="feature-card"><div class="feature-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg></div><h4>Free Shipping</h4><p>On orders above ₹500 with no hidden charges</p></div>
+<div class="feature-card"><div class="feature-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div><h4>Secure Payments</h4><p>100% protected checkouts with encrypted transactions</p></div>
+<div class="feature-card"><div class="feature-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline></svg></div><h4>24x7 Support</h4><p>AI-powered KRITHI Care available anytime you need help</p></div>
+</div>
+</div>
+
+<div class="newsletter-section">
+<div class="newsletter-card">
+<div class="newsletter-left">
+<svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+<div><h3>Stay in the Loop</h3><p>Get exclusive deals, AI insights, and new arrivals straight to your inbox</p></div>
+</div>
+<div class="newsletter-right">
+<input type="email" id="newsletterEmail" placeholder="Enter your email" class="form-input" style="flex:1;min-width:160px;padding:9px 12px;font-size:13px">
+<button class="btn-primary" onclick="subscribeNewsletter()" style="white-space:nowrap;font-size:13px">Subscribe →</button>
+</div>
+</div>
+</div>
+
+</div>
+
+<div class="products-section">
+<div class="section-header">
+<h2 id="sectionTitle">🤖 AI Picks For You</h2>
+<div class="filter-bar">
+<select id="sortSelect" onchange="sortProducts(this.value)" class="sort-select" aria-label="Sort products">
+<option value="relevance">Relevance</option>
+<option value="price-asc">Price: Low to High</option>
+<option value="price-desc">Price: High to Low</option>
+<option value="rating">Top Rated</option>
+<option value="newest">Newest First</option>
+</select>
+</div>
+</div>
+<div class="products-grid" id="productsGrid"><div class="product-card" onclick="showProductDetail(129)"><div style="position:absolute;top:8px;left:8px;background:linear-gradient(135deg,var(--amber),#D97706);color:#000;font-size:9px;font-weight:700;padding:3px 8px;border-radius:99px;z-index:2;letter-spacing:.3px">🏆 Bestseller #1</div><div style="position:absolute;top:8px;right:8px;background:var(--violet);color:#fff;font-size:9px;font-weight:700;padding:3px 8px;border-radius:99px;z-index:2">NEW</div><img class="product-image" src="./KRITHI AI — Shop Smarter with AI_files/photo-1606107557195-0e29a4b5b4aa" alt="Running Shoes For Men(Green)" loading="lazy"><div class="product-info"><div class="product-brand">Bata</div><div class="product-name">Running Shoes For Men(Green)</div><div class="product-rating"><span class="stars">★★★★</span> <span class="review-count">(57372)</span></div><div class="price-chart" title="Price trend (7 days)"><svg width="60" height="18" viewBox="0 0 60 18" style="vertical-align:middle"><polyline points="0,13.692737430167597 10,17 20,15.748603351955307 30,7.569832402234637 40,10.34078212290503 50,4.307262569832401 60,1" fill="none" stroke="var(--violet-dim)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></polyline></svg><span class="price-trend-label">📈</span></div><div class="product-price">₹999</div><div class="product-actions"><button class="add-cart-btn" onclick="event.stopPropagation();addToCart(129)">Add to Cart</button><button class="wish-btn" onclick="event.stopPropagation();toggleWishlist(129)" title="Wishlist">🤍</button><button class="cmp-btn" onclick="event.stopPropagation();toggleCompare(129)" title="Compare">📊</button></div></div></div><div class="product-card" onclick="showProductDetail(101)"><div style="position:absolute;top:8px;left:8px;background:linear-gradient(135deg,var(--amber),#D97706);color:#000;font-size:9px;font-weight:700;padding:3px 8px;border-radius:99px;z-index:2;letter-spacing:.3px">🏆 Bestseller #2</div><div style="position:absolute;top:8px;right:8px;background:var(--violet);color:#fff;font-size:9px;font-weight:700;padding:3px 8px;border-radius:99px;z-index:2">NEW</div><img class="product-image" src="./KRITHI AI — Shop Smarter with AI_files/photo-1542291026-7eec264c27ff" alt="Casuals For Men(Blue)" loading="lazy"><div class="product-info"><div class="product-brand">Aqualite</div><div class="product-name">Casuals For Men(Blue)</div><div class="product-rating"><span class="stars">★★★½</span> <span class="review-count">(27928)</span></div><div class="price-chart" title="Price trend (7 days)"><svg width="60" height="18" viewBox="0 0 60 18" style="vertical-align:middle"><polyline points="0,1.1073825503355703 10,1 20,3.6487695749440707 30,6.941834451901565 40,4.686800894854587 50,9.017897091722595 60,17" fill="none" stroke="var(--violet-dim)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></polyline></svg><span class="price-trend-label">📉</span></div><div class="product-price">₹999</div><div class="product-actions"><button class="add-cart-btn" onclick="event.stopPropagation();addToCart(101)">Add to Cart</button><button class="wish-btn" onclick="event.stopPropagation();toggleWishlist(101)" title="Wishlist">🤍</button><button class="cmp-btn" onclick="event.stopPropagation();toggleCompare(101)" title="Compare">📊</button></div></div></div><div class="product-card" onclick="showProductDetail(125)"><div style="position:absolute;top:8px;left:8px;background:linear-gradient(135deg,var(--amber),#D97706);color:#000;font-size:9px;font-weight:700;padding:3px 8px;border-radius:99px;z-index:2;letter-spacing:.3px">🏆 Bestseller #3</div><img class="product-image" src="./KRITHI AI — Shop Smarter with AI_files/photo-1560769629-975ec94e6a86" alt="Office Casuals For Men(Tan)" loading="lazy"><div class="product-info"><div class="product-brand">Metro</div><div class="product-name">Office Casuals For Men(Tan)</div><div class="product-rating"><span class="stars">★★★½</span> <span class="review-count">(14253)</span></div><div class="price-chart" title="Price trend (7 days)"><svg width="60" height="18" viewBox="0 0 60 18" style="vertical-align:middle"><polyline points="0,1 10,7.168674698795181 20,9.674698795180724 30,16.566265060240966 40,14.686746987951807 50,17 60,16.85542168674699" fill="none" stroke="var(--violet-dim)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></polyline></svg><span class="price-trend-label">📉</span></div><div class="product-price">₹999 <span class="price-old">₹1,063</span> <span class="price-discount">6% off</span></div><div class="product-actions"><button class="add-cart-btn" onclick="event.stopPropagation();addToCart(125)">Add to Cart</button><button class="wish-btn" onclick="event.stopPropagation();toggleWishlist(125)" title="Wishlist">🤍</button><button class="cmp-btn" onclick="event.stopPropagation();toggleCompare(125)" title="Compare">📊</button></div></div></div><div class="product-card" onclick="showProductDetail(112)"><div style="position:absolute;top:8px;right:8px;background:var(--violet);color:#fff;font-size:9px;font-weight:700;padding:3px 8px;border-radius:99px;z-index:2">NEW</div><img class="product-image" src="./KRITHI AI — Shop Smarter with AI_files/photo-1605812860427-4024433a70fd" alt="Office Casuals For Men" loading="lazy"><div class="product-info"><div class="product-brand">Lee Cooper</div><div class="product-name">Office Casuals For Men</div><div class="product-rating"><span class="stars">★★★½</span> <span class="review-count">(14247)</span></div><div class="price-chart" title="Price trend (7 days)"><svg width="60" height="18" viewBox="0 0 60 18" style="vertical-align:middle"><polyline points="0,4.175572519083969 10,1 20,10.078880407124682 30,5.396946564885496 40,8.898218829516539 50,17 60,15.534351145038169" fill="none" stroke="var(--violet-dim)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></polyline></svg><span class="price-trend-label">📉</span></div><div class="product-price">₹999</div><div class="product-actions"><button class="add-cart-btn" onclick="event.stopPropagation();addToCart(112)">Add to Cart</button><button class="wish-btn" onclick="event.stopPropagation();toggleWishlist(112)" title="Wishlist">🤍</button><button class="cmp-btn" onclick="event.stopPropagation();toggleCompare(112)" title="Compare">📊</button></div></div></div><div class="product-card" onclick="showProductDetail(132)"><div style="position:absolute;top:8px;right:8px;background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:3px 8px;border-radius:99px;z-index:2">HOT</div><img class="product-image" src="./KRITHI AI — Shop Smarter with AI_files/photo-1605812860427-4024433a70fd" alt="Men Hawaii Flip Flops" loading="lazy"><div class="product-info"><div class="product-brand">Asian</div><div class="product-name">Men Hawaii Flip Flops</div><div class="product-rating"><span class="stars">★★★½</span> <span class="review-count">(13702)</span></div><div class="price-chart" title="Price trend (7 days)"><svg width="60" height="18" viewBox="0 0 60 18" style="vertical-align:middle"><polyline points="0,17 10,11.875 20,11.8125 30,9.5625 40,2.25 50,3.6875 60,1" fill="none" stroke="var(--violet-dim)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></polyline></svg><span class="price-trend-label">📈</span></div><div class="product-price">₹499 <span class="price-old">₹587</span> <span class="price-discount">15% off</span></div><div class="product-actions"><button class="add-cart-btn" onclick="event.stopPropagation();addToCart(132)">Add to Cart</button><button class="wish-btn" onclick="event.stopPropagation();toggleWishlist(132)" title="Wishlist">🤍</button><button class="cmp-btn" onclick="event.stopPropagation();toggleCompare(132)" title="Compare">📊</button></div></div></div><div class="product-card" onclick="showProductDetail(118)"><div style="position:absolute;top:8px;right:8px;background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:3px 8px;border-radius:99px;z-index:2">HOT</div><img class="product-image" src="./KRITHI AI — Shop Smarter with AI_files/photo-1542291026-7eec264c27ff" alt="SFG-23 Slippers" loading="lazy"><div class="product-info"><div class="product-brand">Lee Cooper</div><div class="product-name">SFG-23 Slippers</div><div class="product-rating"><span class="stars">★★★★</span> <span class="review-count">(12936)</span></div><div class="price-chart" title="Price trend (7 days)"><svg width="60" height="18" viewBox="0 0 60 18" style="vertical-align:middle"><polyline points="0,1 10,5.298507462686567 20,10.233830845771145 30,12.781094527363184 40,17 50,17 60,17" fill="none" stroke="var(--violet-dim)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></polyline></svg><span class="price-trend-label">📉</span></div><div class="product-price">₹319 <span class="price-old">₹409</span> <span class="price-discount">22% off</span></div><div class="product-actions"><button class="add-cart-btn" onclick="event.stopPropagation();addToCart(118)">Add to Cart</button><button class="wish-btn" onclick="event.stopPropagation();toggleWishlist(118)" title="Wishlist">🤍</button><button class="cmp-btn" onclick="event.stopPropagation();toggleCompare(118)" title="Compare">📊</button></div></div></div><div class="product-card" onclick="showProductDetail(114)"><div style="position:absolute;top:8px;right:8px;background:var(--violet);color:#fff;font-size:9px;font-weight:700;padding:3px 8px;border-radius:99px;z-index:2">NEW</div><img class="product-image" src="./KRITHI AI — Shop Smarter with AI_files/photo-1572804013309-59a88b7e92f1" alt="Denill Sneakers For Women" loading="lazy"><div class="product-info"><div class="product-brand">Asian</div><div class="product-name">Denill Sneakers For Women</div><div class="product-rating"><span class="stars">★★★★</span> <span class="review-count">(6806)</span></div><div class="price-chart" title="Price trend (7 days)"><svg width="60" height="18" viewBox="0 0 60 18" style="vertical-align:middle"><polyline points="0,11.621848739495798 10,15.834733893557424 20,17 30,15.521008403361343 40,5.840336134453782 50,7.274509803921569 60,1" fill="none" stroke="var(--violet-dim)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></polyline></svg><span class="price-trend-label">📈</span></div><div class="product-price">₹999</div><div class="product-actions"><button class="add-cart-btn" onclick="event.stopPropagation();addToCart(114)">Add to Cart</button><button class="wish-btn" onclick="event.stopPropagation();toggleWishlist(114)" title="Wishlist">🤍</button><button class="cmp-btn" onclick="event.stopPropagation();toggleCompare(114)" title="Compare">📊</button></div></div></div><div class="product-card" onclick="showProductDetail(136)"><div style="position:absolute;top:8px;right:8px;background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:3px 8px;border-radius:99px;z-index:2">HOT</div><img class="product-image" src="./KRITHI AI — Shop Smarter with AI_files/photo-1491553895911-0055eca6402d" alt="Men Blue Clogs Sandal" loading="lazy"><div class="product-info"><div class="product-brand">Campus</div><div class="product-name">Men Blue Clogs Sandal</div><div class="product-rating"><span class="stars">★★★½</span> <span class="review-count">(3691)</span></div><div class="price-chart" title="Price trend (7 days)"><svg width="60" height="18" viewBox="0 0 60 18" style="vertical-align:middle"><polyline points="0,1 10,4.972413793103449 20,3.0137931034482754 30,3.6206896551724146 40,8.53103448275862 50,17 60,15.179310344827584" fill="none" stroke="var(--violet-dim)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></polyline></svg><span class="price-trend-label">📉</span></div><div class="product-price">₹1,299 <span class="price-old">₹1,528</span> <span class="price-discount">15% off</span></div><div class="product-actions"><button class="add-cart-btn" onclick="event.stopPropagation();addToCart(136)">Add to Cart</button><button class="wish-btn" onclick="event.stopPropagation();toggleWishlist(136)" title="Wishlist">🤍</button><button class="cmp-btn" onclick="event.stopPropagation();toggleCompare(136)" title="Compare">📊</button></div></div></div></div>
+<div class="load-more-wrap">
+<button class="load-more-btn" onclick="loadMore()" style="display: block;">Load More Products</button>
+</div>
+<div id="recentSection" style="margin-top: 20px;"><h3 style="font-family:Outfit,sans-serif;font-size:1rem;margin-bottom:10px;display:flex;align-items:center;gap:6px"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> Recently Viewed</h3><div class="products-grid" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr))"><div class="product-card" onclick="showProductDetail(118)"><div style="position:absolute;top:8px;right:8px;background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:3px 8px;border-radius:99px;z-index:2">HOT</div><img class="product-image" src="./KRITHI AI — Shop Smarter with AI_files/photo-1542291026-7eec264c27ff" alt="SFG-23 Slippers" loading="lazy"><div class="product-info"><div class="product-brand">Lee Cooper</div><div class="product-name">SFG-23 Slippers</div><div class="product-rating"><span class="stars">★★★★</span> <span class="review-count">(12936)</span></div><div class="price-chart" title="Price trend (7 days)"><svg width="60" height="18" viewBox="0 0 60 18" style="vertical-align:middle"><polyline points="0,1 10,1.3980099502487562 20,8.800995024875622 30,14.532338308457712 40,13.577114427860696 50,17 60,17" fill="none" stroke="var(--violet-dim)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></polyline></svg><span class="price-trend-label">📉</span></div><div class="product-price">₹319 <span class="price-old">₹414</span> <span class="price-discount">23% off</span></div><div class="product-actions"><button class="add-cart-btn" onclick="event.stopPropagation();addToCart(118)">Add to Cart</button><button class="wish-btn" onclick="event.stopPropagation();toggleWishlist(118)" title="Wishlist">🤍</button><button class="cmp-btn" onclick="event.stopPropagation();toggleCompare(118)" title="Compare">📊</button></div></div></div><div class="product-card" onclick="showProductDetail(5)"><div style="position:absolute;top:8px;right:8px;background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:3px 8px;border-radius:99px;z-index:2">HOT</div><img class="product-image" src="./KRITHI AI — Shop Smarter with AI_files/photo-1599488615731-7e5c2823f3c5" alt="iPhone 15 Pro Max" loading="lazy"><div class="product-info"><div class="product-brand">Apple</div><div class="product-name">iPhone 15 Pro Max</div><div class="product-rating"><span class="stars">★★★★½</span> <span class="review-count">(1234)</span></div><div class="price-chart" title="Price trend (7 days)"><svg width="60" height="18" viewBox="0 0 60 18" style="vertical-align:middle"><polyline points="0,1.7416814128586786 10,1.1948579161028423 20,11.84098400471878 30,17 40,1.1493355539363659 50,15.080843829152354 60,1" fill="none" stroke="var(--violet-dim)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></polyline></svg><span class="price-trend-label">📉</span></div><div class="product-price">₹119,900 <span class="price-old">₹168,873</span> <span class="price-discount">29% off</span></div><div class="product-actions"><button class="add-cart-btn" onclick="event.stopPropagation();addToCart(5)">Add to Cart</button><button class="wish-btn" onclick="event.stopPropagation();toggleWishlist(5)" title="Wishlist">🤍</button><button class="cmp-btn" onclick="event.stopPropagation();toggleCompare(5)" title="Compare">📊</button></div></div></div><div class="product-card" onclick="showProductDetail(3)"><div style="position:absolute;top:8px;right:8px;background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:3px 8px;border-radius:99px;z-index:2">HOT</div><img class="product-image" src="./KRITHI AI — Shop Smarter with AI_files/photo-1525507119028-ed4c629a60a3" alt="Pure Cashmere Wrap" loading="lazy"><div class="product-info"><div class="product-brand">Prada</div><div class="product-name">Pure Cashmere Wrap</div><div class="product-rating"><span class="stars">★★★★½</span> <span class="review-count">(178)</span></div><div class="price-chart" title="Price trend (7 days)"><svg width="60" height="18" viewBox="0 0 60 18" style="vertical-align:middle"><polyline points="0,11.049713193116634 10,15.913957934990439 20,17 30,1 40,13.359464627151052 50,11.401529636711281 60,9.87189292543021" fill="none" stroke="var(--violet-dim)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></polyline></svg><span class="price-trend-label">📈</span></div><div class="product-price">₹4,999 <span class="price-old">₹6,943</span> <span class="price-discount">28% off</span></div><div class="product-actions"><button class="add-cart-btn" onclick="event.stopPropagation();addToCart(3)">Add to Cart</button><button class="wish-btn" onclick="event.stopPropagation();toggleWishlist(3)" title="Wishlist">🤍</button><button class="cmp-btn" onclick="event.stopPropagation();toggleCompare(3)" title="Compare">📊</button></div></div></div><div class="product-card" onclick="showProductDetail(1)"><div style="position:absolute;top:8px;right:8px;background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:3px 8px;border-radius:99px;z-index:2">HOT</div><img class="product-image" src="./KRITHI AI — Shop Smarter with AI_files/photo-1572804013309-59a88b7e92f1" alt="Crystal Embroidered Dress" loading="lazy"><div class="product-info"><div class="product-brand">Ziva</div><div class="product-name">Crystal Embroidered Dress</div><div class="product-rating"><span class="stars">★★★★½</span> <span class="review-count">(342)</span></div><div class="price-chart" title="Price trend (7 days)"><svg width="60" height="18" viewBox="0 0 60 18" style="vertical-align:middle"><polyline points="0,1 10,15.845360824742269 20,4.711340206185566 30,15.872852233676976 40,17 50,9.659793814432991 60,8.010309278350515" fill="none" stroke="var(--violet-dim)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></polyline></svg><span class="price-trend-label">📉</span></div><div class="product-price">₹2,499 <span class="price-old">₹3,011</span> <span class="price-discount">17% off</span></div><div class="product-actions"><button class="add-cart-btn" onclick="event.stopPropagation();addToCart(1)">Add to Cart</button><button class="wish-btn" onclick="event.stopPropagation();toggleWishlist(1)" title="Wishlist">🤍</button><button class="cmp-btn" onclick="event.stopPropagation();toggleCompare(1)" title="Compare">📊</button></div></div></div><div class="product-card" onclick="showProductDetail(20)"><img class="product-image" src="./KRITHI AI — Shop Smarter with AI_files/photo-1601925260368-ae2f83cf8b7f" alt="Pro Yoga Mat &amp; Blocks" loading="lazy"><div class="product-info"><div class="product-brand">Puma</div><div class="product-name">Pro Yoga Mat &amp; Blocks</div><div class="product-rating"><span class="stars">★★★★½</span> <span class="review-count">(445)</span></div><div class="price-chart" title="Price trend (7 days)"><svg width="60" height="18" viewBox="0 0 60 18" style="vertical-align:middle"><polyline points="0,1.778588807785889 10,13.924574209245742 20,1 30,4.075425790754258 40,17 50,7.7347931873479325 60,12.40632603406326" fill="none" stroke="var(--violet-dim)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></polyline></svg><span class="price-trend-label">📉</span></div><div class="product-price">₹1,999 <span class="price-old">₹2,127</span> <span class="price-discount">6% off</span></div><div class="product-actions"><button class="add-cart-btn" onclick="event.stopPropagation();addToCart(20)">Add to Cart</button><button class="wish-btn" onclick="event.stopPropagation();toggleWishlist(20)" title="Wishlist">🤍</button><button class="cmp-btn" onclick="event.stopPropagation();toggleCompare(20)" title="Compare">📊</button></div></div></div></div></div></div>
+</section>
+
+<section id="cartSection" class="hidden">
+<div class="cart-wrapper">
+<div class="cart-items-col" id="cartItemsCol"></div>
+<div class="cart-summary-col" id="cartSummaryCol"></div>
+</div>
+</section>
+
+<section id="wishlistSection" class="hidden">
+<div class="page-header"><h2><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg> My Wishlist</h2></div>
+<div class="products-grid" id="wishlistGrid"><div class="product-card" onclick="showProductDetail(117)"><div style="position:absolute;top:8px;right:8px;background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:3px 8px;border-radius:99px;z-index:2">HOT</div><img class="product-image" src="./KRITHI AI — Shop Smarter with AI_files/photo-1549298916-b41d501d3772" alt="Running Shoes For Women" loading="lazy"><div class="product-info"><div class="product-brand">Red Chief</div><div class="product-name">Running Shoes For Women</div><div class="product-rating"><span class="stars">★★★★</span> <span class="review-count">(367)</span></div><div class="price-chart" title="Price trend (7 days)"><svg width="60" height="18" viewBox="0 0 60 18" style="vertical-align:middle"><polyline points="0,1 10,3.3856502242152473 20,4.946188340807176 30,7.511210762331839 40,12.1390134529148 50,17 60,5.143497757847534" fill="none" stroke="var(--violet-dim)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></polyline></svg><span class="price-trend-label">📈</span></div><div class="product-price">₹3,999 <span class="price-old">₹4,877</span> <span class="price-discount">18% off</span></div><div class="product-actions"><button class="add-cart-btn" onclick="event.stopPropagation();addToCart(117)">Add to Cart</button><button class="wish-btn" onclick="event.stopPropagation();toggleWishlist(117)" title="Wishlist">❤️</button><button class="cmp-btn" onclick="event.stopPropagation();toggleCompare(117)" title="Compare">📊</button></div></div></div></div>
+</section>
+
+<section id="ordersSection" class="hidden">
+<div class="page-header"><h2><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px"><rect width="20" height="14" x="2" y="5" rx="2"></rect><path d="M2 10h20"></path></svg> My Orders</h2></div>
+<div id="ordersList"><div class="order-card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div><span class="order-id">KRITHI-7675</span><span class="order-status processing">Processing</span></div><span style="font-size:11px;color:var(--text3)">₹359</span></div><div class="order-items">SFG-23 Slippers</div><div style="display:flex;gap:4px;margin:10px 0 4px"><div style="display:flex;flex-direction:column;align-items:center;flex:1;position:relative"><div style="width:22px;height:22px;border-radius:50%;background:var(--violet);border:2px solid var(--violet);display:flex;align-items:center;justify-content:center;font-size:9px;color:#fff;z-index:1">●</div><span style="font-size:8px;color:var(--text3);margin-top:3px;white-space:nowrap">Processing</span><div style="position:absolute;top:11px;left:calc(50% + 11px);width:calc(100% - 22px);height:2px;background:var(--border);z-index:0"></div></div><div style="display:flex;flex-direction:column;align-items:center;flex:1;position:relative"><div style="width:22px;height:22px;border-radius:50%;background:var(--bg3);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--text3);z-index:1"></div><span style="font-size:8px;color:var(--text3);margin-top:3px;white-space:nowrap">Shipped</span><div style="position:absolute;top:11px;left:calc(50% + 11px);width:calc(100% - 22px);height:2px;background:var(--border);z-index:0"></div></div><div style="display:flex;flex-direction:column;align-items:center;flex:1;position:relative"><div style="width:22px;height:22px;border-radius:50%;background:var(--bg3);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--text3);z-index:1"></div><span style="font-size:8px;color:var(--text3);margin-top:3px;white-space:nowrap">Out for Delivery</span><div style="position:absolute;top:11px;left:calc(50% + 11px);width:calc(100% - 22px);height:2px;background:var(--border);z-index:0"></div></div><div style="display:flex;flex-direction:column;align-items:center;flex:1;position:relative"><div style="width:22px;height:22px;border-radius:50%;background:var(--bg3);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--text3);z-index:1"></div><span style="font-size:8px;color:var(--text3);margin-top:3px;white-space:nowrap">Delivered</span></div></div><div class="order-meta">23 May 2026 | KP7675IN</div></div></div>
+</section>
+
+<section id="productDetailSection" class="hidden">
+<div id="productDetailContent"></div>
+</section>
+
+<section id="checkoutSection" class="hidden">
+<div class="checkout-wrapper">
+<div class="checkout-steps">
+<div class="step active" id="step1Tab">1 · ADDRESS</div>
+<div class="step-arrow">›</div>
+<div class="step" id="step2Tab">2 · PAYMENT</div>
+<div class="step-arrow">›</div>
+<div class="step" id="step3Tab">3 · CONFIRM</div>
+</div>
+<div id="checkoutContent"></div>
+</div>
+</section>
+
+<section id="adminSection" class="hidden">
+<div id="adminContent"></div>
+</section>
+</main>
+
+<footer class="footer">
+<div class="footer-inner">
+<div class="footer-col"><h4>ABOUT</h4><a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#" onclick="showModal(&#39;contactModal&#39;);return false">Contact Us</a><a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#">About Us</a><a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#">Careers</a><a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#">KRITHI Stories</a><a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#">Press</a><a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#">Corporate Information</a></div>
+<div class="footer-col"><h4>GROUP COMPANIES</h4><a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#">KRITHI Plus</a><a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#">KRITHI Pay</a><a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#">KRITHI Travel</a><a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#">KRITHI Wholesale</a></div>
+<div class="footer-col"><h4>HELP</h4><a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#">Payments</a><a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#">Shipping</a><a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#">Cancellation &amp; Returns</a><a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#">FAQ</a><a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#">Report Infringement</a></div>
+<div class="footer-col"><h4>CONSUMER POLICY</h4><a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#">Cancellation &amp; Returns</a><a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#">Terms Of Use</a><a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#">Security</a><a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#">Privacy</a><a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#">Sitemap</a><a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#">EPR Compliance</a></div>
+<div class="footer-col"><h4>MAIL US</h4><p>KRITHI AI Private Limited,<br>Anna Nagar, Chennai,<br>Tamil Nadu - 600040, India</p><h4 class="social-title">SOCIAL</h4><div class="social-links">
+<a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#" class="social-btn" aria-label="X"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg></a>
+<a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#" class="social-btn" aria-label="Facebook"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"></path></svg></a>
+<a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#" class="social-btn" aria-label="YouTube"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"></path></svg></a>
+<a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#" class="social-btn" aria-label="Instagram"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405a1.441 1.441 0 0 1-2.88 0 1.44 1.44 0 0 1 2.88 0z"></path></svg></a>
+</div></div>
+</div>
+<div class="footer-bottom">
+<div class="payment-icons">
+<span class="pay-icon">💳 Visa</span><span class="pay-icon">💳 Mastercard</span><span class="pay-icon">🏦 UPI</span><span class="pay-icon">📱 PhonePe</span><span class="pay-icon">💚 GPay</span><span class="pay-icon">🔵 Paytm</span><span class="pay-icon">💵 COD</span>
+</div>
+<p>© 2026 KRITHI AI Private Limited. All rights reserved.</p>
+</div>
+</footer>
+
+<div class="chatbot-widget" id="chatWidget">
+<div class="chat-header" onclick="toggleChat()">
+<div class="chat-avatar"><img src="./KRITHI AI — Shop Smarter with AI_files/krithi-care-logo.svg" alt="KRITHI Care" style="width:32px;height:32px;object-fit:cover;object-position:0 -4px;border-radius:50%"></div>
+<div><div class="chat-title">KRITHI Care</div><div class="chat-status">● Online — AI Assistant</div></div>
+<button class="chat-minimize" id="chatMinBtn">–</button>
+</div>
+<div class="chat-body" id="chatBody">
+<div class="chat-messages" id="chatMessages">
+<div class="msg assistant">
+<div class="msg-bubble">Hi! 👋 I'm <strong>KRITHI Care</strong>, your AI shopping assistant. Ask me about products, orders, returns, or anything else!</div>
+<div class="quick-replies">
+<button onclick="sendQuick(&#39;Recommend products&#39;)">🤖 AI Picks</button>
+<button onclick="sendQuick(&#39;Track my order&#39;)">📦 Track Order</button>
+<button onclick="sendQuick(&#39;What is return policy?&#39;)">↩️ Returns</button>
+<button onclick="sendQuick(&#39;What AI algorithms do you use?&#39;)">🧠 AI Features</button>
+</div>
+</div>
+</div>
+<div class="chat-input-area">
+<input type="text" id="chatInput" placeholder="Type your message..." onkeypress="chatKeyPress(event)">
+<button onclick="sendChatMessage()" class="chat-send">
+<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+</button>
+</div>
+</div>
+</div>
+<button class="chat-trigger" onclick="toggleChat()" id="chatTrigger">
+<img src="./KRITHI AI — Shop Smarter with AI_files/krithi-care-logo.svg" alt="KRITHI Care" style="width:24px;height:24px;border-radius:50%;object-fit:cover;object-position:0 -2px">
+<span class="chat-trigger-text">KRITHI Care</span>
+</button>
+
+<div class="modal-overlay hidden" id="loginModal" onclick="closeModal(&#39;loginModal&#39;)">
+<div class="modal" onclick="event.stopPropagation()">
+<div class="modal-left">
+<h2>Login</h2>
+<p>Get access to your Orders, Wishlist and Recommendations</p>
+<img src="data:image/svg+xml,%3Csvg xmlns=&#39;http://www.w3.org/2000/svg&#39; width=&#39;200&#39; height=&#39;160&#39; viewBox=&#39;0 0 200 160&#39;%3E%3Crect width=&#39;200&#39; height=&#39;160&#39; fill=&#39;%23f0f4ff&#39;/%3E%3Ctext x=&#39;100&#39; y=&#39;85&#39; font-size=&#39;60&#39; text-anchor=&#39;middle&#39;%3E%3C/text%3E%3C/svg%3E" alt="shopping">
+</div>
+<div class="modal-right">
+<button class="modal-close" onclick="closeModal(&#39;loginModal&#39;)">✕</button>
+<div class="form-group"><label>Email Address</label><input type="email" id="loginEmail" placeholder="Enter email address" class="form-input"></div>
+<div class="form-group"><label>Password</label><input type="password" id="loginPassword" placeholder="Enter password" class="form-input"></div>
+<div style="text-align:right;margin:-8px 0 10px"><a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#" onclick="showModal(&#39;forgotModal&#39;);closeModal(&#39;loginModal&#39;)" style="font-size:11px;color:var(--violet);text-decoration:none">Forgot password?</a></div>
+<div class="form-hint">By continuing, you agree to KRITHI AI's <a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#">Terms</a> and <a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#">Privacy Policy</a></div>
+<button class="btn-primary full" onclick="doLogin()" id="loginBtn">Login</button>
+<div class="divider"><span>OR</span></div>
+<button class="btn-outline full" onclick="showOTPLogin()">📱 Login with OTP</button>
+<button class="btn-outline full" onclick="demoLogin()" style="margin-top:6px">🎯 Demo Login (Test Account)</button>
+<button class="btn-outline full" onclick="showModal(&#39;adminLoginModal&#39;)" style="margin-top:6px">🔐 Admin Login</button>
+<div class="switch-auth">New to KRITHI AI? <a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#" onclick="switchModal(&#39;loginModal&#39;,&#39;registerModal&#39;)">Create account</a></div>
+</div>
+</div>
+</div>
+
+<div class="modal-overlay hidden" id="forgotModal" onclick="closeModal(&#39;forgotModal&#39;)">
+<div class="modal" onclick="event.stopPropagation()">
+<div class="modal-left" style="background:linear-gradient(135deg,#1E3A5F,#0D2137)">
+<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity:.7;margin-bottom:8px"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+<h2>Reset Password</h2>
+<p>We'll send a reset link to your registered email</p>
+</div>
+<div class="modal-right">
+<button class="modal-close" onclick="closeModal(&#39;forgotModal&#39;)">✕</button>
+<h3 style="margin-bottom:16px">🔑 Forgot Password</h3>
+<div class="form-group"><label>Email Address</label><input type="email" id="forgotEmail" placeholder="Enter your registered email" class="form-input"></div>
+<button class="btn-primary full" onclick="sendResetLink()">Send Reset Link →</button>
+<div style="font-size:10px;color:var(--text3);margin-top:8px;text-align:center">Link expires in 15 minutes</div>
+<div class="switch-auth" style="margin-top:12px"><a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#" onclick="switchModal(&#39;forgotModal&#39;,&#39;loginModal&#39;)" style="color:var(--violet);text-decoration:none">← Back to Login</a></div>
+</div>
+</div>
+</div>
+
+<div class="modal-overlay hidden" id="otpModal" onclick="closeModal(&#39;otpModal&#39;)">
+<div class="modal" onclick="event.stopPropagation()">
+<div class="modal-left" style="background:linear-gradient(135deg,#065F46,#047857)">
+<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity:.7;margin-bottom:8px"><rect x="2" y="2" width="20" height="20" rx="3"></rect><path d="M12 12c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3z"></path><path d="M18 22v-2c0-2.21-2.69-4-6-4s-6 1.79-6 4v2"></path></svg>
+<h2>OTP Login</h2>
+<p>Quick login via email OTP — no password needed</p>
+</div>
+<div class="modal-right">
+<button class="modal-close" onclick="closeModal(&#39;otpModal&#39;)">✕</button>
+<div id="otpStep1">
+<h3 style="margin-bottom:16px">📱 Enter Your Details</h3>
+<div class="form-group"><label>Email or Phone Number</label><input type="text" id="otpContact" placeholder="email@example.com or +91 XXXXX XXXXX" class="form-input"></div>
+<button class="btn-primary full" onclick="sendOTP()">Send OTP →</button>
+<div class="switch-auth" style="margin-top:12px"><a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#" onclick="switchModal(&#39;otpModal&#39;,&#39;loginModal&#39;)" style="color:var(--violet);text-decoration:none">← Back to Login</a></div>
+</div>
+<div id="otpStep2" class="hidden">
+<h3 style="margin-bottom:16px">🔢 Enter OTP</h3>
+<p style="font-size:12px;color:var(--text2);margin-bottom:12px">A 6-digit code has been sent to <span id="otpDestination" style="color:var(--violet);font-weight:600"></span></p>
+<div style="display:flex;gap:6px;justify-content:center;margin-bottom:14px">
+<input class="otp-input" id="otp1" maxlength="1" oninput="otpMove(this,2)" onkeydown="otpBack(event,1)" autofocus="">
+<input class="otp-input" id="otp2" maxlength="1" oninput="otpMove(this,3)" onkeydown="otpBack(event,2)">
+<input class="otp-input" id="otp3" maxlength="1" oninput="otpMove(this,4)" onkeydown="otpBack(event,3)">
+<input class="otp-input" id="otp4" maxlength="1" oninput="otpMove(this,5)" onkeydown="otpBack(event,4)">
+<input class="otp-input" id="otp5" maxlength="1" oninput="otpMove(this,6)" onkeydown="otpBack(event,5)">
+<input class="otp-input" id="otp6" maxlength="1" oninput="otpVerify()" onkeydown="otpBack(event,6)">
+</div>
+<button class="btn-primary full" onclick="verifyOTP()">Verify &amp; Login →</button>
+<div style="text-align:center;margin-top:8px;font-size:11px;color:var(--text3)">Didn't receive? <a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#" onclick="resendOTP()" style="color:var(--violet);text-decoration:none">Resend OTP</a> <span id="otpTimer" style="color:var(--text2)">(30s)</span></div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="modal-overlay hidden" id="registerModal" onclick="closeModal(&#39;registerModal&#39;)">
+<div class="modal" onclick="event.stopPropagation()">
+<div class="modal-left"><h2>Welcome!</h2><p>Create your KRITHI AI account and get 100 bonus points!</p></div>
+<div class="modal-right">
+<button class="modal-close" onclick="closeModal(&#39;registerModal&#39;)">✕</button>
+<h3 style="margin-bottom:20px">Create Account</h3>
+<div class="form-group"><label>Full Name</label><input type="text" id="regName" placeholder="Your full name" class="form-input"></div>
+<div class="form-group"><label>Email Address</label><input type="email" id="regEmail" placeholder="Email address" class="form-input"></div>
+<div class="form-group"><label>Mobile Number</label><input type="tel" id="regPhone" placeholder="+91 XXXXX XXXXX" class="form-input"></div>
+<div class="form-group"><label>Password</label><input type="password" id="regPassword" placeholder="Min 8 characters" class="form-input"></div>
+<button class="btn-primary full" onclick="doRegister()" id="registerBtn">Create Account</button>
+<div class="switch-auth">Already have an account? <a href="file:///C:/Users/LENOVO/AppData/Local/Temp/opencode/krithi-ai/index.html#" onclick="switchModal(&#39;registerModal&#39;,&#39;loginModal&#39;)">Login</a></div>
+</div>
+</div>
+</div>
+
+<div class="modal-overlay hidden" id="contactModal" onclick="closeModal(&#39;contactModal&#39;)">
+<div class="modal modal-contact" onclick="event.stopPropagation()">
+<div class="modal-left contact-left">
+<h2>Get in Touch</h2>
+<p>We'd love to hear from you! Our team typically responds within 2 hours.</p>
+<svg width="140" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" style="opacity:.5;margin-top:auto"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.15 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.06 2h3a2 2 0 0 1 2 1.72v.1a16 16 0 0 0 .87 3.41 2 2 0 0 1-.45 2.11L7.91 10.6a16 16 0 0 0 6.4 6.4l1.36-.5a2 2 0 0 1 2.11.45 16 16 0 0 0 3.41.87 2 2 0 0 1 1.81 2z"></path></svg>
+</div>
+<div class="modal-right">
+<button class="modal-close" onclick="closeModal(&#39;contactModal&#39;)">✕</button>
+<h3 style="margin-bottom:16px">📬 Contact KRITHI AI</h3>
+<div class="form-group"><label>Your Name</label><input type="text" id="contactName" placeholder="Full name" class="form-input"></div>
+<div class="form-group"><label>Email Address</label><input type="email" id="contactEmail" placeholder="email@example.com" class="form-input"></div>
+<div class="form-group"><label>Subject</label>
+<select id="contactSubject" class="form-input" style="appearance:auto">
+<option>Order Support</option><option>Product Inquiry</option><option>Return &amp; Refund</option><option>Partnership</option><option>Feedback</option><option>Other</option>
+</select></div>
+<div class="form-group"><label>Message</label><textarea id="contactMessage" class="form-input" rows="4" placeholder="How can we help you?" style="resize:vertical;min-height:80px"></textarea></div>
+<button class="btn-primary full" onclick="submitContact()">Send Message →</button>
+<div style="font-size:10px;color:var(--text3);margin-top:10px;text-align:center">⏱️ Average response time: 2 hours</div>
+</div>
+</div>
+</div>
+
+<div class="modal-overlay hidden" id="adminLoginModal" onclick="closeModal(&#39;adminLoginModal&#39;)">
+<div class="modal admin-modal" onclick="event.stopPropagation()">
+<div class="modal-left admin-login-left">
+<div style="text-align:center;margin-bottom:16px">
+<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity:.9"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+</div>
+<h2 style="text-align:center">Admin Access</h2>
+<p style="text-align:center;font-size:12px">Secure dashboard for store management and analytics</p>
+</div>
+<div class="modal-right">
+<button class="modal-close" onclick="closeModal(&#39;adminLoginModal&#39;)">✕</button>
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:20px">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--violet)" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+<h3 style="font-size:1rem;margin:0">KRITHI Prime Admin</h3>
+</div>
+<div class="form-group"><label>Admin Email</label><input type="email" id="adminEmail" placeholder="admin@krithi.ai" class="form-input" value="admin@krithi.ai"></div>
+<div class="form-group"><label>Password</label><input type="password" id="adminPassword" placeholder="Enter admin password" class="form-input" value="admin123"></div>
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;font-size:11px;color:var(--text3)"><input type="checkbox" id="adminRemember" checked=""> <label for="adminRemember">Keep me signed in</label></div>
+<button class="btn-primary full" onclick="adminLogin()" id="adminLoginBtn" style="display:flex;align-items:center;justify-content:center;gap:6px">
+<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+Login to Dashboard
+</button>
+<button class="btn-outline full" onclick="adminQuickLogin()" style="margin-top:8px">⚡ Quick Admin Access</button>
+<div class="divider"><span>OR</span></div>
+<button class="btn-outline full" onclick="switchModal(&#39;adminLoginModal&#39;,&#39;loginModal&#39;)" style="font-size:11px">← Back to User Login</button>
+</div>
+</div>
+</div>
+
+<div class="modal-overlay hidden" id="adminVerifyModal" onclick="closeModal(&#39;adminVerifyModal&#39;)">
+<div class="modal" style="max-width:400px" onclick="event.stopPropagation()">
+<div class="modal-left" style="width:140px;background:linear-gradient(135deg,var(--violet),#7C3AED);align-items:center;justify-content:center">
+<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path><circle cx="12" cy="16" r="1" fill="currentColor"></circle></svg>
+<h2 style="font-size:.9rem;text-align:center;margin-top:8px">2-Step<br>Verification</h2>
+</div>
+<div class="modal-right" style="padding:24px">
+<button class="modal-close" onclick="closeModal(&#39;adminVerifyModal&#39;);adminStep=null">✕</button>
+<p style="font-size:12px;color:var(--text2);margin-bottom:4px">A verification code was sent to</p>
+<p id="adminVerifyEmail" style="font-size:13px;font-weight:600;margin-bottom:12px">admin@krithi.ai</p>
+<div style="background:var(--bg4);border-radius:6px;padding:6px 10px;margin-bottom:10px;text-align:center;font-size:11px;border:1px dashed var(--violet-dim)">
+Demo Code: <strong id="adminDemoCode" style="font-size:15px;color:var(--mint);letter-spacing:2px;font-family:monospace">------</strong>
+<span style="color:var(--text3)"> (shown for testing)</span>
+</div>
+<div class="form-group" style="margin-bottom:8px"><label>Enter 6-Digit Code</label>
+<div style="display:flex;gap:6px;justify-content:center;margin-top:6px">
+<input type="text" class="form-input otp-input" id="av1" maxlength="1" oninput="avMove(this,2)" onkeydown="avBack(this,1,event)" style="width:40px;text-align:center;font-size:18px;padding:8px 0">
+<input type="text" class="form-input otp-input" id="av2" maxlength="1" oninput="avMove(this,3)" onkeydown="avBack(this,2,event)" style="width:40px;text-align:center;font-size:18px;padding:8px 0">
+<input type="text" class="form-input otp-input" id="av3" maxlength="1" oninput="avMove(this,4)" onkeydown="avBack(this,3,event)" style="width:40px;text-align:center;font-size:18px;padding:8px 0">
+<input type="text" class="form-input otp-input" id="av4" maxlength="1" oninput="avMove(this,5)" onkeydown="avBack(this,4,event)" style="width:40px;text-align:center;font-size:18px;padding:8px 0">
+<input type="text" class="form-input otp-input" id="av5" maxlength="1" oninput="avMove(this,6)" onkeydown="avBack(this,5,event)" style="width:40px;text-align:center;font-size:18px;padding:8px 0">
+<input type="text" class="form-input otp-input" id="av6" maxlength="1" oninput="avMove(this,7);adminVerifyOTP()" onkeydown="avBack(this,6,event)" style="width:40px;text-align:center;font-size:18px;padding:8px 0">
+</div></div>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px">
+<span id="adminVerifyTimer" style="font-size:11px;color:var(--text3)">⏱ 60s</span>
+<button onclick="adminResendVerify()" id="adminResendBtn" class="btn-outline" style="font-size:11px;padding:4px 12px">Resend Code</button>
+</div>
+<div id="adminVerifyError" style="font-size:11px;color:var(--red);margin-top:6px;text-align:center;display:none"></div>
+</div>
+</div>
+</div>
+
+<div class="modal-overlay hidden" id="confirmModal" onclick="closeModal(&#39;confirmModal&#39;)">
+<div class="modal" style="max-width:400px" onclick="event.stopPropagation()">
+<div class="modal-left" style="width:140px;background:linear-gradient(135deg,var(--red),#DC2626);align-items:center;justify-content:center">
+<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path><circle cx="17.5" cy="6.5" r=".5" fill="currentColor"></circle></svg>
+<h2 style="font-size:1rem;text-align:center;margin-top:8px">Logout?</h2>
+</div>
+<div class="modal-right" style="padding:24px">
+<button class="modal-close" onclick="closeModal(&#39;confirmModal&#39;)">✕</button>
+<p id="confirmMsg" style="font-size:13px;color:var(--text2);margin-bottom:18px"></p>
+<div style="display:flex;gap:8px">
+<button class="btn-outline full" onclick="closeModal(&#39;confirmModal&#39;)" style="font-size:12px">Cancel</button>
+<button class="btn-primary full" id="confirmAction" style="font-size:12px;background:linear-gradient(135deg,var(--red),#DC2626)">Yes, Logout</button>
+</div>
+</div>
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="./KRITHI AI — Shop Smarter with AI_files/faq.js"></script>
+<script src="./KRITHI AI — Shop Smarter with AI_files/app.js"></script>
+
+</body></html>

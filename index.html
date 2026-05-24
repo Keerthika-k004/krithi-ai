@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KRITHI AI - Shop Smarter with AI</title>
+    <meta name="description"
+        content="India's AI-powered e-commerce platform with personalized deals and 24x7 KRITHI Care support.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-inner">
+            <div class="nav-left">
+                <a href="/" class="logo" title="KRITHI AI Home" aria-label="KRITHI AI Home">
+                    <span class="logo-k">K</span><span class="logo-rest">RITHI</span>
+                    <span class="logo-ai">AI</span>
+                </a>
+                <div class="location-bar">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                        <circle cx="12" cy="10" r="3" />
+                    </svg>
+                    <span>Deliver to <b>Chennai 600001</b></span>
+                </div>
+            </div>
+            <div class="nav-center">
+                <div class="search-box">
+                    <span class="search-ai-badge">AI</span>
+                    <input type="text" id="searchInput" placeholder="Search for products, brands and more..."
+                        oninput="handleSearch(this.value)">
+                    <button class="search-btn" onclick="doSearch()" aria-label="Search" title="Search">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"
+                            viewBox="0 0 24 24">
+                            <circle cx="11" cy="11" r="8" />
+                            <path d="m21 21-4.35-4.35" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="nav-right">
+                <div class="nav-item login-dropdown" id="loginDropdown">
+                    <button class="nav-btn" onclick="toggleDropdown('loginMenu')">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
+                        <span id="navUserName">Login</span>
+                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <polyline points="6 9 12 15 18 9" />
+                        </svg>
+                    </button>
+                    <div class="dropdown-menu" id="loginMenu">
+                        <div class="dropdown-header" id="dropdownHeader">
+                            <span>New customer?</span> <a href="#" onclick="showModal('registerModal')"
+                                class="signup-link">Sign Up</a>
+                        </div>
+                        <a href="#" onclick="showModal('loginModal')" class="dropdown-item"><svg width="16" height="16"
+                                fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                <circle cx="12" cy="7" r="4" />
+                            </svg> My Profile</a>
+                        <a href="#" onclick="showSection('orders')" class="dropdown-item"><svg width="16" height="16"
+                                fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <rect width="20" height="14" x="2" y="5" rx="2" />
+                                <path d="M2 10h20" />
+                            </svg> Orders</a>
+                        <a href="#" onclick="showSection('wishlist')" class="dropdown-item"><svg width="16" height="16"
+                                fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path
+                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                            </svg> Wishlist</a>
+                        <a href="#" class="dropdown-item loyalty"><svg width="16" height="16" fill="none"
+                                stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <polygon
+                                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                            </svg> KRITHI Plus Zone</a>
+                        <a href="#" class="dropdown-item"><svg width="16" height="16" fill="none" stroke="currentColor"
+                                stroke-width="2" viewBox="0 0 24 24">
+                                <rect width="18" height="18" x="3" y="3" rx="2" />
+                                <path d="M9 9h.01M15 9h.01M9 15h.01M15 15h.01" />
+                            </svg> Rewards</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#support" class="dropdown-item"><svg width="16" height="16" fill="none"
+                                stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path
+                                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.15 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.06 2h3a2 2 0 0 1 2 1.72v.1a16 16 0 0 0 .87 3.41 2 2 0 0 1-.45 2.11L7.91 10.6a16 16 0 0 0 6.4 6.4l1.36-.5a2 2 0 0 1 2.11.45 16 16 0 0 0 3.41.87 2 2 0 0 1 1.81 2z" />
+                            </svg> 24x7 Customer Care</a>
+                        <a href="#" id="logoutBtn" class="dropdown-item hidden" onclick="logout()"><svg width="16"
+                                height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                                <polyline points="16 17 21 12 16 7" />
+                                <line x1="21" y1="12" x2="9" y2="12" />
+                            </svg> Logout</a>
+                    </div>
+                </div>
+                <div class="nav-item">
+                    <button class="nav-btn" onclick="toggleDropdown('moreMenu')">
+                        More
+                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <polyline points="6 9 12 15 18 9" />
+                        </svg>
+                    </button>
+                    <div class="dropdown-menu" id="moreMenu">
+                        <a href="#" class="dropdown-item"><svg width="16" height="16" fill="none" stroke="currentColor"
+                                stroke-width="2" viewBox="0 0 24 24">
+                                <rect width="20" height="14" x="2" y="7" rx="2" />
+                                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                            </svg> Become a Seller</a>
+                        <a href="#" class="dropdown-item"><svg width="16" height="16" fill="none" stroke="currentColor"
+                                stroke-width="2" viewBox="0 0 24 24">
+                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                            </svg> Notification Settings</a>
+                        <a href="#" onclick="openChat()" class="dropdown-item"><svg width="16" height="16" fill="none"
+                                stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path
+                                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.15 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.06 2h3a2 2 0 0 1 2 1.72v.1a16 16 0 0 0 .87 3.41 2 2 0 0 1-.45 2.11L7.91 10.6a16 16 0 0 0 6.4 6.4l1.36-.5a2 2 0 0 1 2.11.45 16 16 0 0 0 3.41.87 2 2 0 0 1 1.81 2z" />
+                            </svg> 24x7 KRITHI Care</a>
+                        <a href="#" class="dropdown-item"><svg width="16" height="16" fill="none" stroke="currentColor"
+                                stroke-width="2" viewBox="0 0 24 24">
+                                <rect width="20" height="14" x="2" y="5" rx="2" />
+                                <path d="M2 10h20" />
+                            </svg> Advertise on KRITHI AI</a>
+                        <a href="#admin" onclick="showAdminPanel()" class="dropdown-item admin-link"><svg width="16"
+                                height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path d="M12 20h9" />
+                                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                            </svg> Admin Dashboard</a>
+                    </div>
+                </div>
+                <button class="cart-btn" onclick="showSection('cart')" id="cartBtn">
+                    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <circle cx="9" cy="21" r="1" />
+                        <circle cx="20" cy="21" r="1" />
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                    </svg>
+                    Cart
+                    <span class="cart-count" id="cartCount">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CATEGORY BAR -->
+    <div class="cat-bar" id="catBar">
+        <div class="cat-inner">
+            <div class="cat-item active" onclick="filterCategory('all', this)">
+                <div class="cat-icon">⭐</div>
+                <span>For You</span>
+            </div>
+            <div class="cat-item" onclick="filterCategory('fashion', this)">
+                <div class="cat-icon">👗</div>
+                <span>Fashion</span>
+            </div>
+            <div class="cat-item" onclick="filterCategory('mobiles', this)">
+                <div class="cat-icon">📱</div>
+                <span>Mobiles</span>
+            </div>
+            <div class="cat-item" onclick="filterCategory('beauty', this)">
+                <div class="cat-icon">💄</div>
+                <span>Beauty</span>
+            </div>
+            <div class="cat-item" onclick="filterCategory('electronics', this)">
+                <div class="cat-icon">💻</div>
+                <span>Electronics</span>
+            </div>
+            <div class="cat-item" onclick="filterCategory('home', this)">
+                <div class="cat-icon">🏠</div>
+                <span>Home</span>
+            </div>
+            <div class="cat-item" onclick="filterCategory('appliances', this)">
+                <div class="cat-icon">🔌</div>
+                <span>Appliances</span>
+            </div>
+            <div class="cat-item" onclick="filterCategory('toys', this)">
+                <div class="cat-icon">🧸</div>
+                <span>Toys &amp; Baby</span>
+            </div>
+            <div class="cat-item" onclick="filterCategory('food', this)">
+                <div class="cat-icon">🍎</div>
+                <span>Food &amp; Health</span>
+            </div>
+            <div class="cat-item" onclick="filterCategory('sports', this)">
+                <div class="cat-icon">🏋️</div>
+                <span>Sports</span>
+            </div>
+            <div class="cat-item" onclick="filterCategory('books', this)">
+                <div class="cat-icon">📚</div>
+                <span>Books</span>
+            </div>
+            <div class="cat-item" onclick="filterCategory('furniture', this)">
+                <div class="cat-icon">🛋️</div>
+                <span>Furniture</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main id="mainContent">
+
+        <!-- HOME SECTION -->
+        <section id="homeSection">
+            <!-- BANNER SLIDER -->
+            <div class="banner-section">
+                <div class="banner-slider" id="bannerSlider">
+                    <div class="banner-slide active">>
+                        <div class="banner-content">
+                            <div class="banner-badge">🤖 AI-Powered Deals</div>
+                            <h1>KRITHI AI</h1>
+                            <p>Shop Smarter. Save Bigger.</p>
+                            <p class="banner-sub">Personalized deals curated by AI just for you</p>
+                            <button class="banner-cta" onclick="filterCategory('all',null)">Shop Now →</button>
+                        </div>
+                        <div class="banner-visual">
+                            <div class="floating-card">
+                                <span>🎯 AI Pick for You</span>
+                                <strong>iPhone 15 Pro</strong>
+                                <em>₹1,19,900 — Today only!</em>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="banner-slide flash-sale">
+                        <div class="banner-content dark">
+                            <div class="banner-badge flash-badge">⚡ Flash Sale</div>
+                            <h1>Electronics Week</h1>
+                            <p>Up to 60% OFF</p>
+                            <p class="banner-sub">Top brands — Samsung, Apple, Sony & more</p>
+                            <button class="banner-cta dark" onclick="filterCategory('electronics',null)">Grab Deals
+                                →</button>
+                        </div>
+                    </div>
+                    <div class="banner-slide fashion-slide">
+                        <div class="banner-content">
+                            <div class="banner-badge">👗 Fashion Week</div>
+                            <h1>Style Season</h1>
+                            <p>Trendy Picks at ₹499</p>
+                            <p class="banner-sub">Nike • Levi's • Zara • H&M & more</p>
+                            <button class="banner-cta" onclick="filterCategory('fashion',null)">Explore Fashion
+                                →</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="slider-dots" id="sliderDots">
+                    <span class="dot active" onclick="goToSlide(0)"></span>
+                    <span class="dot" onclick="goToSlide(1)"></span>
+                    <span class="dot" onclick="goToSlide(2)"></span>
+                </div>
+                <button class="slider-prev" onclick="prevSlide()">&#10094;</button>
+                <button class="slider-next" onclick="nextSlide()">&#10095;</button>
+            </div>
+
+            <!-- AI PERSONALIZED STRIP -->
+            <div class="ai-strip">
+                <div class="ai-strip-inner">
+                    <div class="ai-badge-big">🤖 KRITHI AI</div>
+                    <div class="ai-strip-items">
+                        <div class="ai-strip-item"><span>🎯</span> Curated for You</div>
+                        <div class="ai-strip-item"><span>💡</span> Smart Suggestions</div>
+                        <div class="ai-strip-item"><span>🔔</span> Price Alerts</div>
+                        <div class="ai-strip-item"><span>🛡️</span> 100% Secure</div>
+                        <div class="ai-strip-item"><span>🚚</span> Free Shipping ₹500+</div>
+                        <div class="ai-strip-item"><span>↩️</span> Easy Returns</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRODUCTS GRID -->
+            <div class="products-section">
+                <div class="section-header">
+                    <h2 id="sectionTitle">🤖 AI Picks For You</h2>
+                    <div class="filter-bar">
+                        <label for="sortSelect" class="sr-only">Sort products</label>
+                        <select id="sortSelect" onchange="sortProducts(this.value)" class="sort-select"
+                            aria-label="Sort products">
+                            <option value="relevance">Relevance</option>
+                            <option value="price-asc">Price: Low to High</option>
+                            <option value="price-desc">Price: High to Low</option>
+                            <option value="rating">Top Rated</option>
+                            <option value="newest">Newest First</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="products-grid" id="productsGrid"></div>
+                <div class="load-more-wrap">
+                    <button class="load-more-btn" onclick="loadMore()">Load More Products</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- CART SECTION -->
+        <section id="cartSection" class="hidden">
+            <div class="cart-wrapper">
+                <div class="cart-items-col" id="cartItemsCol"></div>
+                <div class="cart-summary-col" id="cartSummaryCol"></div>
+            </div>
+        </section>
+
+        <!-- WISHLIST SECTION -->
+        <section id="wishlistSection" class="hidden">
+            <div class="page-header">
+                <h2>❤️ My Wishlist</h2>
+            </div>
+            <div class="products-grid" id="wishlistGrid"></div>
+        </section>
+
+        <!-- ORDERS SECTION -->
+        <section id="ordersSection" class="hidden">
+            <div class="page-header">
+                <h2>📦 My Orders</h2>
+            </div>
+            <div id="ordersList"></div>
+        </section>
+
+        <!-- PRODUCT DETAIL SECTION -->
+        <section id="productDetailSection" class="hidden">
+            <div id="productDetailContent"></div>
+        </section>
+
+        <!-- CHECKOUT SECTION -->
+        <section id="checkoutSection" class="hidden">
+            <div class="checkout-wrapper">
+                <div class="checkout-steps">
+                    <div class="step active" id="step1Tab">1 · ADDRESS</div>
+                    <div class="step-arrow">›</div>
+                    <div class="step" id="step2Tab">2 · PAYMENT</div>
+                    <div class="step-arrow">›</div>
+                    <div class="step" id="step3Tab">3 · CONFIRM</div>
+                </div>
+                <div id="checkoutContent"></div>
+            </div>
+        </section>
+
+        <!-- ADMIN SECTION -->
+        <section id="adminSection" class="hidden">
+            <div id="adminContent"></div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-col">
+                <h4>ABOUT</h4>
+                <a href="#">Contact Us</a>
+                <a href="#">About Us</a>
+                <a href="#">Careers</a>
+                <a href="#">KRITHI Stories</a>
+                <a href="#">Press</a>
+                <a href="#">Corporate Information</a>
+            </div>
+            <div class="footer-col">
+                <h4>GROUP COMPANIES</h4>
+                <a href="#">KRITHI Plus</a>
+                <a href="#">KRITHI Pay</a>
+                <a href="#">KRITHI Travel</a>
+                <a href="#">KRITHI Wholesale</a>
+            </div>
+            <div class="footer-col">
+                <h4>HELP</h4>
+                <a href="#">Payments</a>
+                <a href="#">Shipping</a>
+                <a href="#">Cancellation &amp; Returns</a>
+                <a href="#">FAQ</a>
+                <a href="#">Report Infringement</a>
+            </div>
+            <div class="footer-col">
+                <h4>CONSUMER POLICY</h4>
+                <a href="#">Cancellation &amp; Returns</a>
+                <a href="#">Terms Of Use</a>
+                <a href="#">Security</a>
+                <a href="#">Privacy</a>
+                <a href="#">Sitemap</a>
+                <a href="#">EPR Compliance</a>
+            </div>
+            <div class="footer-col">
+                <h4>MAIL US</h4>
+                <p>KRITHI AI Private Limited,<br>Anna Nagar, Chennai,<br>Tamil Nadu - 600040, India</p>
+                <h4 class="social-title">SOCIAL</h4>
+                <div class="social-links">
+                    <a href="#" class="social-btn">𝕏</a>
+                    <a href="#" class="social-btn">f</a>
+                    <a href="#" class="social-btn">▶</a>
+                    <a href="#" class="social-btn">📸</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="payment-icons">
+                <span class="pay-icon">💳 Visa</span>
+                <span class="pay-icon">💳 Mastercard</span>
+                <span class="pay-icon">🏦 UPI</span>
+                <span class="pay-icon">📱 PhonePe</span>
+                <span class="pay-icon">💚 GPay</span>
+                <span class="pay-icon">🔵 Paytm</span>
+                <span class="pay-icon">💵 COD</span>
+            </div>
+            <p>© 2024 KRITHI AI Private Limited. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- CHATBOT WIDGET -->
+    <div class="chatbot-widget" id="chatWidget">
+        <div class="chat-header" onclick="toggleChat()">
+            <div class="chat-avatar">🤖</div>
+            <div>
+                <div class="chat-title">KRITHI Care</div>
+                <div class="chat-status">● Online — AI Assistant</div>
+            </div>
+            <button class="chat-minimize" id="chatMinBtn">–</button>
+        </div>
+        <div class="chat-body" id="chatBody">
+            <div class="chat-messages" id="chatMessages">
+                <div class="msg assistant">
+                    <div class="msg-bubble">Hi! 👋 I'm <strong>KRITHI Care</strong>, your AI shopping assistant. How can
+                        I help you today?</div>
+                    <div class="quick-replies">
+                        <button onclick="sendQuick('Track my order')">📦 Track Order</button>
+                        <button onclick="sendQuick('Show me today\'s deals')">🔥 Today\'s Deals</button>
+                        <button onclick="sendQuick('Help with return')">↩️ Return Help</button>
+                    </div>
+                </div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="chatInput" placeholder="Type your message..." onkeypress="chatKeyPress(event)">
+                <button onclick="sendChatMessage()" class="chat-send">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <line x1="22" y1="2" x2="11" y2="13" />
+                        <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+    <button class="chat-trigger" onclick="toggleChat()" id="chatTrigger">
+        <span>🤖</span>
+        <span class="chat-trigger-text">KRITHI Care</span>
+    </button>
+
+    <!-- LOGIN MODAL -->
+    <div class="modal-overlay hidden" id="loginModal" onclick="closeModal('loginModal')">
+        <div class="modal" onclick="event.stopPropagation()">
+            <div class="modal-left">
+                <h2>Login</h2>
+                <p>Get access to your Orders, Wishlist and Recommendations</p>
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='160' viewBox='0 0 200 160'%3E%3Crect width='200' height='160' fill='%23f0f4ff'/%3E%3Ctext x='100' y='85' font-size='60' text-anchor='middle'%3E🛍️%3C/text%3E%3C/svg%3E"
+                    alt="shopping">
+            </div>
+            <div class="modal-right">
+                <button class="modal-close" onclick="closeModal('loginModal')">✕</button>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="loginEmail" placeholder="Enter email address" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter password" class="form-input">
+                </div>
+                <div class="form-hint">By continuing, you agree to KRITHI AI's <a href="#">Terms</a> and <a
+                        href="#">Privacy Policy</a></div>
+                <button class="btn-primary full" onclick="doLogin()" id="loginBtn">Login</button>
+                <div class="divider"><span>OR</span></div>
+                <button class="btn-outline full" onclick="demoLogin()">🎯 Demo Login (Test Account)</button>
+                <button class="btn-outline full" onclick="demoAdminLogin()" style="margin-top:8px">🔧 Admin Demo
+                    Login</button>
+                <div class="switch-auth">New to KRITHI AI? <a href="#"
+                        onclick="switchModal('loginModal','registerModal')">Create account</a></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- REGISTER MODAL -->
+    <div class="modal-overlay hidden" id="registerModal" onclick="closeModal('registerModal')">
+        <div class="modal" onclick="event.stopPropagation()">
+            <div class="modal-left">
+                <h2>Welcome!</h2>
+                <p>Create your KRITHI AI account and get 100 bonus points!</p>
+            </div>
+            <div class="modal-right">
+                <button class="modal-close" onclick="closeModal('registerModal')">✕</button>
+                <h3 style="margin-bottom:20px">Create Account</h3>
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="regName" placeholder="Your full name" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="regEmail" placeholder="Email address" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label>Mobile Number</label>
+                    <input type="tel" id="regPhone" placeholder="+91 XXXXX XXXXX" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="regPassword" placeholder="Min 8 characters" class="form-input">
+                </div>
+                <button class="btn-primary full" onclick="doRegister()" id="registerBtn">Create Account</button>
+                <div class="switch-auth">Already have an account? <a href="#"
+                        onclick="switchModal('registerModal','loginModal')">Login</a></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast"></div>
+
+    <script src="js/app.js"></script>
+</body>
+
+</html>
