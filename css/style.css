@@ -395,7 +395,58 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overf
 .newsletter-left p{margin:2px 0 0;font-size:11px;color:var(--text3)}
 .newsletter-right{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 
-/* ---- Animations ---- */
+/* ---- Deals Entrance ---- */
+.deal-card{animation:dealSlideUp .5s ease-out both}
+.deal-card:nth-child(1){animation-delay:0s}
+.deal-card:nth-child(2){animation-delay:.08s}
+.deal-card:nth-child(3){animation-delay:.16s}
+.deal-card:nth-child(4){animation-delay:.24s}
+.deal-card:nth-child(5){animation-delay:.32s}
+.deal-card:nth-child(6){animation-delay:.4s}
+.deal-card:nth-child(7){animation-delay:.48s}
+.deal-card:nth-child(8){animation-delay:.56s}
+@keyframes dealSlideUp{from{opacity:0;transform:translateY(20px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+/* ---- Category Cards Entrance ---- */
+.cat-card{animation:catFadeIn .5s ease-out both}
+.cat-card:nth-child(1){animation-delay:0s}
+.cat-card:nth-child(2){animation-delay:.06s}
+.cat-card:nth-child(3){animation-delay:.12s}
+.cat-card:nth-child(4){animation-delay:.18s}
+.cat-card:nth-child(5){animation-delay:.24s}
+.cat-card:nth-child(6){animation-delay:.3s}
+.cat-card:nth-child(7){animation-delay:.36s}
+.cat-card:nth-child(8){animation-delay:.42s}
+@keyframes catFadeIn{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+
+/* ---- Brand Items Entrance ---- */
+.brand-item{animation:brandSlide .4s ease-out both}
+.brand-item:nth-child(1){animation-delay:0s}
+.brand-item:nth-child(2){animation-delay:.05s}
+.brand-item:nth-child(3){animation-delay:.1s}
+.brand-item:nth-child(4){animation-delay:.15s}
+.brand-item:nth-child(5){animation-delay:.2s}
+.brand-item:nth-child(6){animation-delay:.25s}
+.brand-item:nth-child(7){animation-delay:.3s}
+.brand-item:nth-child(8){animation-delay:.35s}
+@keyframes brandSlide{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}
+
+/* ---- Newsletter Pulse ---- */
+.newsletter-card{animation:newsletterGlow 4s ease-in-out infinite}
+@keyframes newsletterGlow{0%,100%{border-color:var(--border)}50%{border-color:rgba(139,92,246,.25);box-shadow:0 0 30px rgba(139,92,246,.08)}}
+
+/* ---- Product Image Zoom Enhancement ---- */
+.product-card:hover .product-image{transform:scale(1.08);transition:transform .6s cubic-bezier(.22,1,.36,1)}
+
+/* ---- Navbar Shimmer Line ---- */
+.navbar::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--violet),var(--mint),transparent);background-size:200% 100%;animation:shimmer 3s ease-in-out infinite;opacity:.5}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+
+/* ---- Page Transition ---- */
+#homeSection,#cartSection,#wishlistSection,#ordersSection,#productDetailSection,#checkoutSection,#adminSection{animation:pageFade .3s ease-out}
+@keyframes pageFade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ---- Legacy Animations ---- */
 @keyframes floatAvatar{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
 @keyframes starPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.8;transform:scale(1.1)}}
 @keyframes floatIcon{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}

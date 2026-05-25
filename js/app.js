@@ -281,7 +281,8 @@ let sel=document.getElementById('reviewRating');
 let rating=sel?parseInt(sel.value):5;
 if(!reviews[pid])reviews[pid]=[];
 reviews[pid].unshift({user:(currentUser?currentUser.name:'Guest'),text:inp.value.trim(),rating,date:new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short'})});
-inp.value='';saveState();showProductDetail(pid);toast('Review posted!')}
+inp.value='';saveState();showProductDetail(pid);toast('Review posted!');
+callAPI('POST','/api/reviews',{product:pid,user:(currentUser?currentUser.name:'Guest'),text:reviews[pid][0].text,rating}).catch(()=>{})}
 
 // ---- Orders ----
 function renderOrdersList(){
@@ -369,10 +370,11 @@ let total=getCartTotal();let disc=0;let ship=total>=500?0:40;
 if(appliedCoupon){let c=COUPONS[appliedCoupon];
 if(c.freeShip)ship=0;else disc=c.disc;
 if(c.disc>0)disc=Math.min(total*(c.disc/100),c.disc)}
-orders.unshift({id:oid,date:new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}),items,total:total-disc+ship,status:'Processing',tracking:'KP'+oid.slice(-4)+'IN'});
-cart=[];updateCartCount();saveState();
+let order={id:oid,date:new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}),items,total:total-disc+ship,status:'Processing',tracking:'KP'+oid.slice(-4)+'IN'};
+orders.unshift(order);cart=[];updateCartCount();saveState();
 toast('Order placed! ID: '+oid);
-showSection('home')}
+showSection('home');
+callAPI('POST','/api/orders',{items:items.map(n=>{let p=PRODUCTS.find(x=>x.name===n);return{product:p?p.id:null,name:n,price:p?p.price:0,qty:1}}),total:order.total,status:'Processing'}).catch(()=>{})}
 
 // ---- Admin ----
 function showAdminPanel(){
@@ -464,7 +466,7 @@ let q=inp?inp.value.trim():'';if(!q)return;
 addPrimeMessage(q,true);inp.value='';
 if(apiAvailable){
   addPrimeMessage('<em style="font-size:11px;color:var(--text3)">Processing...</em>',false);
-  callAPI('/api/prime',{query:q}).then(data=>{
+  callAPI('POST','/api/prime',{query:q}).then(data=>{
     document.querySelectorAll('#primeMessages .msg:last-child .msg-bubble').forEach(el=>{
       if(el.innerHTML.includes('Processing'))el.parentElement.remove()});
     if(data.reply){addPrimeMessage(data.reply,false);addPrimeQuickReplies()}
@@ -668,19 +670,7 @@ if(adminFailCount>=5){adminLockedUntil=now+60000;adminFailCount=0;toast('🔒 To
 else{toast('Invalid admin credentials ('+adminFailCount+'/'+5+')')}
 adminAudit('login_failed',email+' from '+(navigator.userAgent||'unknown'));
 return}
-adminFailCount=0;
-adminPendingEmail=email;
-adminVerifyCode=String(Math.floor(100000+Math.random()*900000));
-adminStep='verify';
-document.getElementById('adminVerifyEmail').textContent=email;
-document.getElementById('adminDemoCode').textContent=adminVerifyCode;
-document.getElementById('adminVerifyError').style.display='none';
-document.querySelectorAll('#adminVerifyModal .otp-input').forEach(i=>i.value='');
-switchModal('adminLoginModal','adminVerifyModal');
-toast('📧 Verification code sent to '+email);
-adminAudit('verify_code_sent',email);
-startAdminVerifyTimer();
-document.getElementById('av1').focus()}
+demoAdminLogin()}
 
 function adminVerifyOTP(){
 let code='';
@@ -731,6 +721,18 @@ document.getElementById('adminEmail').value='admin@krithi.ai';
 document.getElementById('adminPassword').value='admin123';
 adminLogin()}
 
+function demoAdminLogin(){
+adminFailCount=0;
+adminLoggedIn=true;
+adminSettings.adminEmail='admin@krithi.ai';
+saveAdminState();
+adminAudit('login_success','admin@krithi.ai (quick demo)');
+closeAllModals();
+document.querySelectorAll('.dropdown-menu').forEach(m=>m.classList.remove('open'));
+document.querySelector('.admin-link')&&(document.querySelector('.admin-link').innerHTML='<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Dashboard');
+toast('✅ Logged in as Admin');
+showAdminPanel()}
+
 function adminLogout(){
 document.getElementById('confirmMsg').textContent='Are you sure you want to logout of Admin Dashboard?';
 document.getElementById('confirmAction').onclick=()=>{
@@ -747,7 +749,9 @@ showModal('confirmModal')}
 // Update showAdminPanel to check auth
 const origShowAdminPanel=showAdminPanel;
 showAdminPanel=function(){
-if(!adminLoggedIn){showModal('adminLoginModal');return}
+if(!adminLoggedIn){demoAdminLogin();return}
+document.querySelectorAll('.dropdown-menu').forEach(m=>m.classList.remove('open'));
+document.querySelector('.admin-link')&&(document.querySelector('.admin-link').innerHTML='<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Dashboard');
 origShowAdminPanel()}
 
 function doRegister(){
@@ -889,14 +893,15 @@ let apiAvailable=false;
 const API_BASE='http://localhost:3000';
 
 function checkAPI(){
-fetch(API_BASE+'/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:'ping'})})
-.then(r=>r.ok).then(ok=>{apiAvailable=ok;if(ok)console.log('🖥️ KRITHI AI Server API connected')})
-.catch(()=>{apiAvailable=false})}
+  fetch(API_BASE+'/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:'ping'})})
+  .then(r=>r.ok).then(ok=>{apiAvailable=ok;if(ok)console.log('🖥️ KRITHI AI Server API connected')})
+  .catch(()=>{apiAvailable=false})}
 
-function callAPI(endpoint,data){
-if(!apiAvailable)return Promise.reject('API not available');
-return fetch(API_BASE+endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
-.then(r=>r.json()).catch(()=>{apiAvailable=false;return Promise.reject('API error')})}
+function callAPI(method,endpoint,data){
+  if(!apiAvailable)return Promise.reject('API not available');
+  let opts={method,headers:{'Content-Type':'application/json'}};
+  if(data)opts.body=JSON.stringify(data);
+  return fetch(API_BASE+endpoint,opts).then(r=>r.json()).catch(()=>{apiAvailable=false;return Promise.reject('API error')})}
 
 // ---- Init ----
 function requireAdminReauth(callback){
