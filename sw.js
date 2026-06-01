@@ -1,4 +1,4 @@
-const CACHE = 'krithi-ai-v1';
+const CACHE = 'krithi-ai-v2';
 const ASSETS = [
   '/krithi-ai/',
   '/krithi-ai/index.html',
@@ -6,7 +6,8 @@ const ASSETS = [
   '/krithi-ai/js/app.js',
   '/krithi-ai/js/faq.js',
   '/krithi-ai/manifest.json',
-  '/krithi-ai/icon-192.svg'
+  '/krithi-ai/icon-192.png',
+  '/krithi-ai/icon-512.png'
 ];
 
 self.addEventListener('install', e => {
@@ -20,7 +21,13 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
-  e.respondWith(
-    caches.match(e.request).then(r => r || fetch(e.request).catch(() => new Response('Offline', { status: 503 })))
-  );
+  const { request } = e;
+  const url = new URL(request.url);
+  if (url.pathname.startsWith('/krithi-ai/')) {
+    if (request.mode === 'navigate') {
+      e.respondWith(fetch(request).catch(() => caches.match('/krithi-ai/index.html')));
+    } else {
+      e.respondWith(caches.match(request).then(r => r || fetch(request).catch(() => new Response('Offline', { status: 503 }))));
+    }
+  }
 });
