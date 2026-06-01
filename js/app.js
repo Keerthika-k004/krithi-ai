@@ -638,19 +638,18 @@ doLogin()}
 // ---- Admin Auth ----
 let adminLoggedIn=false;
 let adminPendingEmail=null;
-let adminVerifyCode=null;
-let adminStep=null; // 'creds' | 'verify'
 let adminFailCount=0;
 let adminLockedUntil=0;
 let adminActivityLog=[];
+let adminSessionToken=null;
 let adminSettings={storeName:'KRITHI AI',currency:'INR',taxRate:18,shipThreshold:500,notifyLowStock:true,notifyDailyReport:false,notifyNewOrder:true,adminEmail:'admin@krithi.ai'};
 
 function loadAdminState(){
-try{let s=localStorage.getItem('krithi_admin');if(s){let d=JSON.parse(s);adminLoggedIn=d.loggedIn||false;if(d.settings)Object.assign(adminSettings,d.settings);if(d.activityLog)adminActivityLog=d.activityLog}
+try{let s=localStorage.getItem('krithi_admin');if(s){let d=JSON.parse(s);adminLoggedIn=d.loggedIn||false;if(d.token)adminSessionToken=d.token;if(d.settings)Object.assign(adminSettings,d.settings);if(d.activityLog)adminActivityLog=d.activityLog}
 if(adminLoggedIn)document.querySelector('.admin-link')&&(document.querySelector('.admin-link').innerHTML='<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Dashboard')}catch(e){}}
 
 function saveAdminState(){
-try{localStorage.setItem('krithi_admin',JSON.stringify({loggedIn:adminLoggedIn,settings:adminSettings,activityLog:adminActivityLog}))}catch(e){}}
+try{localStorage.setItem('krithi_admin',JSON.stringify({loggedIn:adminLoggedIn,token:adminSessionToken,settings:adminSettings,activityLog:adminActivityLog}))}catch(e){}}
 
 function adminAudit(action,detail){
 adminActivityLog.unshift({action,detail,email:adminSettings.adminEmail,time:Date.now()});
@@ -662,64 +661,88 @@ let now=Date.now();
 if(now<adminLockedUntil){let s=Math.ceil((adminLockedUntil-now)/1000);toast('🔒 Account locked. Try again in '+s+'s');return}
 let email=document.getElementById('adminEmail').value.trim();
 let pass=document.getElementById('adminPassword').value.trim();
-let validEmails=['admin@krithi.ai','super@krithi.ai'];
-let validPass='admin123';
-if(!validEmails.includes(email)||pass!==validPass){
+if(!email||!pass){toast('Please enter email and password');return}
+let btn=document.getElementById('adminLoginBtn');if(btn){btn.disabled=true;btn.textContent='⏳ Verifying...'}
+function fail(){
 adminFailCount++;
 if(adminFailCount>=5){adminLockedUntil=now+60000;adminFailCount=0;toast('🔒 Too many failed attempts. Locked for 60s')}
-else{toast('Invalid admin credentials ('+adminFailCount+'/'+5+')')}
+else{toast('Invalid credentials ('+adminFailCount+'/'+5+')')}
 adminAudit('login_failed',email+' from '+(navigator.userAgent||'unknown'));
-return}
-demoAdminLogin()}
+if(btn){btn.disabled=false;btn.textContent='Login'}}
+if(apiAvailable){
+callAPI('POST','/api/auth/admin/login',{email,password:pass}).then(data=>{
+if(data.success){adminPendingEmail=data.email;closeModal('adminLoginModal');showAdminOtpModal(data._demo?data._demo.otp:null)}
+else{fail()}
+if(btn){btn.disabled=false;btn.textContent='Login'}
+}).catch(()=>{fallbackLogin(email,pass)})}
+else{fallbackLogin(email,pass)}}
 
-function adminVerifyOTP(){
+function fallbackLogin(email,pass){
+if(email.toLowerCase()==='admin@krithi.ai'&&pass==='admin123'){
+adminPendingEmail='admin@krithi.ai';closeModal('adminLoginModal');
+showAdminOtpModal();toast('OTP sent to admin@krithi.ai (demo: 123456)')
+}else{
+adminFailCount++;
+if(adminFailCount>=5){adminLockedUntil=Date.now()+60000;adminFailCount=0;toast('🔒 Locked for 60s')}
+else{toast('Invalid credentials ('+adminFailCount+'/'+5+')')}
+adminAudit('login_failed',email+' from '+(navigator.userAgent||'unknown'))}
+let btn=document.getElementById('adminLoginBtn');if(btn){btn.disabled=false;btn.textContent='Login'}}
+
+function showAdminLoginModal(){
+if(adminLoggedIn){showAdminPanel();return}
+closeAllModals();
+document.querySelectorAll('.dropdown-menu').forEach(m=>m.classList.remove('open'));
+document.getElementById('adminLoginModal').classList.remove('hidden');
+document.getElementById('adminEmail').focus()}
+
+function showAdminOtpModal(demoOtp){
+let el=document.getElementById('adminOtpError');if(el)el.style.display='none';
+for(let i=1;i<=6;i++){let inp=document.getElementById('ao'+i);if(inp)inp.value=''}
+document.getElementById('adminOtpModal').classList.remove('hidden');
+document.getElementById('ao1').focus();
+if(demoOtp){
+document.getElementById('adminOtpTimer').innerHTML='📧 Demo OTP: <strong style="color:var(--violet)">'+demoOtp+'</strong>'}
+else{document.getElementById('adminOtpTimer').innerHTML='📧 Check console for OTP (demo: 123456)'}}
+
+function adminVerifyOtp(){
 let code='';
-for(let i=1;i<=6;i++)code+=document.getElementById('av'+i).value||'';
-if(code.length<6)return;
-if(code!==adminVerifyCode){
-document.getElementById('adminVerifyError').textContent='❌ Invalid verification code. Please try again.';
-document.getElementById('adminVerifyError').style.display='block';
+for(let i=1;i<=6;i++)code+=document.getElementById('ao'+i).value||'';
+if(code.length<6){document.getElementById('adminOtpError').textContent='Please enter all 6 digits';document.getElementById('adminOtpError').style.display='block';return}
+let el=document.getElementById('adminOtpError');if(el)el.style.display='none';
+if(apiAvailable){
+callAPI('POST','/api/auth/admin/verify-otp',{email:adminPendingEmail,otp:code}).then(data=>{
+if(data.success){
+adminSessionToken=data.token;
+adminLoggedIn=true;
+adminSettings.adminEmail=data.user.email;
+saveAdminState();
+closeModal('adminOtpModal');
+adminAudit('login_success',data.user.email);
+toast('✅ Verified! Welcome back, Admin.');
+showAdminPanel()}
+}).catch(()=>{otpFallbackVerify(code)})}
+else{otpFallbackVerify(code)}}
+
+function otpFallbackVerify(code){
+let validCode='123456';
+if(code!==validCode){
+document.getElementById('adminOtpError').textContent='❌ Invalid OTP. Try 123456';
+document.getElementById('adminOtpError').style.display='block';
 adminAudit('verify_failed',adminPendingEmail);
 return}
-document.getElementById('adminVerifyError').style.display='none';
 adminLoggedIn=true;
-adminSettings.adminEmail=adminPendingEmail;
-adminPendingEmail=null;adminVerifyCode=null;adminStep=null;
+adminSettings.adminEmail=adminPendingEmail||'admin@krithi.ai';
+adminSessionToken='demo-token-'+Date.now();
 saveAdminState();
-closeModal('adminVerifyModal');
+closeModal('adminOtpModal');
 adminAudit('login_success',adminSettings.adminEmail);
 toast('✅ Verified! Welcome back, Admin.');
 showAdminPanel()}
 
-function adminResendVerify(){
-adminVerifyCode=String(Math.floor(100000+Math.random()*900000));
-document.getElementById('adminDemoCode').textContent=adminVerifyCode;
-toast('📧 New code sent');
-adminAudit('verify_resend',adminPendingEmail);
-startAdminVerifyTimer()}
-
-function startAdminVerifyTimer(){
-let t=60;clearInterval(window._avTimer);
-document.getElementById('adminResendBtn').disabled=true;
-document.getElementById('adminResendBtn').style.opacity='.5';
-window._avTimer=setInterval(()=>{
-t--;document.getElementById('adminVerifyTimer').textContent='⏱ '+t+'s';
-if(t<=0){clearInterval(window._avTimer);
-document.getElementById('adminResendBtn').disabled=false;
-document.getElementById('adminResendBtn').style.opacity='1';
-document.getElementById('adminVerifyTimer').textContent='⏱ Code expired';
-document.getElementById('adminVerifyError').textContent='❌ Code expired. Request a new one.';
-document.getElementById('adminVerifyError').style.display='block'}},1000)}
-
-function avMove(el,next){
-if(el.value.length===1&&next<=6)document.getElementById('av'+next)&&document.getElementById('av'+next).focus()}
-function avBack(el,prev,e){
-if(e.key==='Backspace'&&el.value.length===0&&prev>=1)document.getElementById('av'+prev)&&document.getElementById('av'+prev).focus()}
-
-function adminQuickLogin(){
-document.getElementById('adminEmail').value='admin@krithi.ai';
-document.getElementById('adminPassword').value='admin123';
-adminLogin()}
+function aoMove(el,next){
+if(el.value.length===1&&next<=6)document.getElementById('ao'+next)&&document.getElementById('ao'+next).focus()}
+function aoBack(el,cur,e){
+if(e.key==='Backspace'&&el.value.length===0&&cur>1)document.getElementById('ao'+(cur-1))&&document.getElementById('ao'+(cur-1)).focus()}
 
 function demoAdminLogin(){
 adminFailCount=0;
@@ -737,7 +760,9 @@ function adminLogout(){
 document.getElementById('confirmMsg').textContent='Are you sure you want to logout of Admin Dashboard?';
 document.getElementById('confirmAction').onclick=()=>{
 adminAudit('logout','Admin logged out');
-adminLoggedIn=false;currentUser=null;saveAdminState();saveState();
+adminLoggedIn=false;currentUser=null;adminSessionToken=null;
+if(apiAvailable)callAPI('POST','/api/auth/admin/logout',{}).catch(()=>{});
+saveAdminState();saveState();
 document.querySelector('.admin-link')&&(document.querySelector('.admin-link').innerHTML='<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Admin Dashboard');
 document.getElementById('navUserName').textContent='Login';
 document.getElementById('dropdownHeader').innerHTML='<span>New customer?</span> <a href="#" onclick="showModal(\'registerModal\')" class="signup-link">Sign Up</a>';
@@ -749,7 +774,7 @@ showModal('confirmModal')}
 // Update showAdminPanel to check auth
 const origShowAdminPanel=showAdminPanel;
 showAdminPanel=function(){
-if(!adminLoggedIn){demoAdminLogin();return}
+if(!adminLoggedIn){showAdminLoginModal();return}
 document.querySelectorAll('.dropdown-menu').forEach(m=>m.classList.remove('open'));
 document.querySelector('.admin-link')&&(document.querySelector('.admin-link').innerHTML='<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Dashboard');
 origShowAdminPanel()}
@@ -833,7 +858,7 @@ document.addEventListener('mousemove',()=>resetSessionTimer());
 
 function forceLogout(){
 if(sessionTimer)clearTimeout(sessionTimer);
-currentUser=null;adminLoggedIn=false;saveState();saveAdminState();
+currentUser=null;adminLoggedIn=false;adminSessionToken=null;saveState();saveAdminState();
 document.getElementById('navUserName').textContent='Login';
 document.getElementById('dropdownHeader').innerHTML='<span>New customer?</span> <a href="#" onclick="showModal(\'registerModal\')" class="signup-link">Sign Up</a>';
 document.getElementById('logoutBtn').classList.add('hidden');

@@ -133,7 +133,7 @@
                                 <rect width="20" height="14" x="2" y="5" rx="2" />
                                 <path d="M2 10h20" />
                             </svg> Advertise on KRITHI AI</a>
-                        <a href="#admin" onclick="showAdminPanel()" class="dropdown-item admin-link"><svg width="16"
+                        <a href="#admin" onclick="showAdminLoginModal()" class="dropdown-item admin-link"><svg width="16"
                                 height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                 <path d="M12 20h9" />
                                 <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
@@ -299,14 +299,14 @@
             <div class="cat-grid-section">
                 <div class="section-header"><h2>📂 Shop by Category</h2></div>
                 <div class="cat-grid" id="catGrid">
-                    <div class="cat-card" onclick="filterCategory('fashion',null)" style="background-image:linear-gradient(rgba(10,10,15,.7),rgba(10,10,15,.85)),url(https://images.unsplash.com/photo-1445205170230-053b83016050?w=300&h=200&fit=crop);background-size:cover;background-position:center"><span>Fashion</span><small>Up to 70% off</small></div>
-                    <div class="cat-card" onclick="filterCategory('electronics',null)" style="background-image:linear-gradient(rgba(10,10,15,.7),rgba(10,10,15,.85)),url(https://images.unsplash.com/photo-1498049794561-7780e7231661?w=300&h=200&fit=crop);background-size:cover;background-position:center"><span>Electronics</span><small>Latest gadgets</small></div>
-                    <div class="cat-card" onclick="filterCategory('mobiles',null)" style="background-image:linear-gradient(rgba(10,10,15,.7),rgba(10,10,15,.85)),url(https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=300&h=200&fit=crop);background-size:cover;background-position:center"><span>Mobiles</span><small>Top brands</small></div>
-                    <div class="cat-card" onclick="filterCategory('home',null)" style="background-image:linear-gradient(rgba(10,10,15,.7),rgba(10,10,15,.85)),url(https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=300&h=200&fit=crop);background-size:cover;background-position:center"><span>Home</span><small>Decor & more</small></div>
-                    <div class="cat-card" onclick="filterCategory('beauty',null)" style="background-image:linear-gradient(rgba(10,10,15,.7),rgba(10,10,15,.85)),url(https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=300&h=200&fit=crop);background-size:cover;background-position:center"><span>Beauty</span><small>Top picks</small></div>
-                    <div class="cat-card" onclick="filterCategory('sports',null)" style="background-image:linear-gradient(rgba(10,10,15,.7),rgba(10,10,15,.85)),url(https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300&h=200&fit=crop);background-size:cover;background-position:center"><span>Sports</span><small>Active wear</small></div>
-                    <div class="cat-card" onclick="filterCategory('books',null)" style="background-image:linear-gradient(rgba(10,10,15,.7),rgba(10,10,15,.85)),url(https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=300&h=200&fit=crop);background-size:cover;background-position:center"><span>Books</span><small>Bestsellers</small></div>
-                    <div class="cat-card" onclick="filterCategory('furniture',null)" style="background-image:linear-gradient(rgba(10,10,15,.7),rgba(10,10,15,.85)),url(https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=300&h=200&fit=crop);background-size:cover;background-position:center"><span>Furniture</span><small>New arrivals</small></div>
+                    <div class="cat-card cat-bg-fashion" onclick="filterCategory('fashion',null)"><span>Fashion</span><small>Up to 70% off</small></div>
+                    <div class="cat-card cat-bg-electronics" onclick="filterCategory('electronics',null)"><span>Electronics</span><small>Latest gadgets</small></div>
+                    <div class="cat-card cat-bg-mobiles" onclick="filterCategory('mobiles',null)"><span>Mobiles</span><small>Top brands</small></div>
+                    <div class="cat-card cat-bg-home" onclick="filterCategory('home',null)"><span>Home</span><small>Decor & more</small></div>
+                    <div class="cat-card cat-bg-beauty" onclick="filterCategory('beauty',null)"><span>Beauty</span><small>Top picks</small></div>
+                    <div class="cat-card cat-bg-sports" onclick="filterCategory('sports',null)"><span>Sports</span><small>Active wear</small></div>
+                    <div class="cat-card cat-bg-books" onclick="filterCategory('books',null)"><span>Books</span><small>Bestsellers</small></div>
+                    <div class="cat-card cat-bg-furniture" onclick="filterCategory('furniture',null)"><span>Furniture</span><small>New arrivals</small></div>
                 </div>
             </div>
 
@@ -354,8 +354,8 @@
                         <div><h3>Stay in the Loop</h3><p>Get exclusive deals, AI insights, and new arrivals straight to your inbox</p></div>
                     </div>
                     <div class="newsletter-right">
-                        <input type="email" id="newsletterEmail" placeholder="Enter your email" class="form-input" style="flex:1;min-width:160px;padding:9px 12px;font-size:13px">
-                        <button class="btn-primary" onclick="subscribeNewsletter()" style="white-space:nowrap;font-size:13px">Subscribe →</button>
+                        <input type="email" id="newsletterEmail" placeholder="Enter your email" class="form-input newsletter-input">
+                        <button class="btn-primary newsletter-btn" onclick="subscribeNewsletter()">Subscribe →</button>
                     </div>
                 </div>
             </div>
@@ -484,13 +484,13 @@
         </div>
         <div class="footer-bottom">
             <div class="payment-icons">
-                <span class="pay-icon"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:3px"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg> Visa</span>
-                <span class="pay-icon"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:3px"><rect x="1" y="4" width="22" height="16" rx="2"/><circle cx="8" cy="12" r="2"/><circle cx="16" cy="12" r="2"/></svg> Mastercard</span>
-                <span class="pay-icon"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:3px"><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10A15.3 15.3 0 0112 2z"/></svg> UPI</span>
-                <span class="pay-icon"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:3px"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 014.15 13a19.79 19.79 0 01-3.07-8.67A2 2 0 013.06 2h3a2 2 0 012 1.72v.1a16 16 0 00.87 3.41 2 2 0 01-.45 2.11L7.91 10.6a16 16 0 006.4 6.4l1.36-.5a2 2 0 012.11.45 16 16 0 003.41.87 2 2 0 011.81 2z"/></svg> PhonePe</span>
-                <span class="pay-icon"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:3px"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> GPay</span>
-                <span class="pay-icon"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:3px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Paytm</span>
-                <span class="pay-icon"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:3px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> COD</span>
+                <span class="pay-icon"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" class="pay-icon-svg"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg> Visa</span>
+                <span class="pay-icon"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" class="pay-icon-svg"><rect x="1" y="4" width="22" height="16" rx="2"/><circle cx="8" cy="12" r="2"/><circle cx="16" cy="12" r="2"/></svg> Mastercard</span>
+                <span class="pay-icon"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" class="pay-icon-svg"><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10A15.3 15.3 0 0112 2z"/></svg> UPI</span>
+                <span class="pay-icon"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" class="pay-icon-svg"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 014.15 13a19.79 19.79 0 01-3.07-8.67A2 2 0 013.06 2h3a2 2 0 012 1.72v.1a16 16 0 00.87 3.41 2 2 0 01-.45 2.11L7.91 10.6a16 16 0 006.4 6.4l1.36-.5a2 2 0 012.11.45 16 16 0 003.41.87 2 2 0 011.81 2z"/></svg> PhonePe</span>
+                <span class="pay-icon"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" class="pay-icon-svg"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> GPay</span>
+                <span class="pay-icon"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" class="pay-icon-svg"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Paytm</span>
+                <span class="pay-icon"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" class="pay-icon-svg"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> COD</span>
             </div>
             <p>© 2024 KRITHI AI Private Limited. All rights reserved.</p>
         </div>
@@ -520,7 +520,7 @@
             </div>
             <div class="chat-input-area">
                 <input type="text" id="chatInput" placeholder="Type your message..." onkeypress="chatKeyPress(event)">
-                <button onclick="sendChatMessage()" class="chat-send">
+                <button onclick="sendChatMessage()" class="chat-send" aria-label="Send Message" title="Send Message">
                     <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <line x1="22" y1="2" x2="11" y2="13" />
                         <polygon points="22 2 15 22 11 13 2 9 22 2" />
@@ -558,8 +558,7 @@
                 <button class="btn-primary full" onclick="doLogin()" id="loginBtn">Login</button>
                 <div class="divider"><span>OR</span></div>
                 <button class="btn-outline full" onclick="demoLogin()">🎯 Demo Login (Test Account)</button>
-                <button class="btn-outline full" onclick="demoAdminLogin()" style="margin-top:8px">🔧 Admin Demo
-                    Login</button>
+                <button class="btn-outline full mt-8" onclick="showModal('adminLoginModal')">🔧 Admin Login</button>
                 <div class="switch-auth">New to KRITHI AI? <a href="#"
                         onclick="switchModal('loginModal','registerModal')">Create account</a></div>
             </div>
@@ -575,7 +574,7 @@
             </div>
             <div class="modal-right">
                 <button class="modal-close" onclick="closeModal('registerModal')">✕</button>
-                <h3 style="margin-bottom:20px">Create Account</h3>
+                <h3 class="modal-title">Create Account</h3>
                 <div class="form-group">
                     <label>Full Name</label>
                     <input type="text" id="regName" placeholder="Your full name" class="form-input">
@@ -595,6 +594,80 @@
                 <button class="btn-primary full" onclick="doRegister()" id="registerBtn">Create Account</button>
                 <div class="switch-auth">Already have an account? <a href="#"
                         onclick="switchModal('registerModal','loginModal')">Login</a></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN LOGIN MODAL -->
+    <div class="modal-overlay hidden" id="adminLoginModal" onclick="closeModal('adminLoginModal')">
+        <div class="modal" onclick="event.stopPropagation()">
+            <div class="modal-left modal-left-violet">
+                <h2 class="text-white">Admin Access</h2>
+                <p class="text-white">Secure login for store administrators.</p>
+            </div>
+            <div class="modal-right">
+                <button class="modal-close" onclick="closeModal('adminLoginModal')">✕</button>
+                <h3 class="mb-20">Admin Login</h3>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="realAdminEmail" placeholder="admin@krithi.ai" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="realAdminPassword" placeholder="Enter password" class="form-input">
+                </div>
+                <button class="btn-primary full" onclick="adminLogin()" id="realAdminBtn">Login to Dashboard</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN LOGIN MODAL -->
+    <div class="modal-overlay hidden" id="adminLoginModal" onclick="closeModal('adminLoginModal')">
+        <div class="modal admin-modal" onclick="event.stopPropagation()">
+            <div class="modal-left admin-login-left">
+                <h2>🔐 Admin Login</h2>
+                <p>Enter your admin credentials to access the KRITHI AI dashboard.</p>
+                <p style="font-size:10px;opacity:.5;margin-top:auto">Demo: admin@krithi.ai / admin123</p>
+            </div>
+            <div class="modal-right">
+                <button class="modal-close" onclick="closeModal('adminLoginModal')">✕</button>
+                <div class="form-group">
+                    <label>Admin Email</label>
+                    <input type="email" id="adminEmail" placeholder="admin@krithi.ai" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="adminPassword" placeholder="Enter password" class="form-input" onkeypress="if(event.key==='Enter')adminLogin()">
+                </div>
+                <button class="btn-primary full" onclick="adminLogin()" id="adminLoginBtn">Login</button>
+                <div class="divider"><span>OR</span></div>
+                <button class="btn-outline full" onclick="demoAdminLogin()">⚡ Quick Demo Access</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN OTP MODAL -->
+    <div class="modal-overlay hidden" id="adminOtpModal" onclick="closeModal('adminOtpModal')">
+        <div class="modal admin-modal" onclick="event.stopPropagation()">
+            <div class="modal-left admin-login-left" style="background:linear-gradient(135deg,#1A1A2E,#2A1A3E)!important">
+                <h2>🔑 Verify OTP</h2>
+                <p>A 6-digit verification code has been sent to your registered email.</p>
+                <p style="font-size:10px;opacity:.5;margin-top:auto">⏱ Expires in 5 minutes</p>
+            </div>
+            <div class="modal-right" style="text-align:center">
+                <button class="modal-close" onclick="closeModal('adminOtpModal')">✕</button>
+                <div style="margin:12px 0 6px;font-size:12px;color:var(--text2)">Enter 6-digit OTP</div>
+                <div id="adminOtpError" style="font-size:11px;color:var(--red);margin-bottom:8px;display:none"></div>
+                <div style="display:flex;gap:6px;justify-content:center;margin:12px 0">
+                    <input type="text" class="otp-input" id="ao1" maxlength="1" oninput="aoMove(this,2)" onkeydown="aoBack(this,1,event)" autofocus>
+                    <input type="text" class="otp-input" id="ao2" maxlength="1" oninput="aoMove(this,3)" onkeydown="aoBack(this,2,event)">
+                    <input type="text" class="otp-input" id="ao3" maxlength="1" oninput="aoMove(this,4)" onkeydown="aoBack(this,3,event)">
+                    <input type="text" class="otp-input" id="ao4" maxlength="1" oninput="aoMove(this,5)" onkeydown="aoBack(this,4,event)">
+                    <input type="text" class="otp-input" id="ao5" maxlength="1" oninput="aoMove(this,6)" onkeydown="aoBack(this,5,event)">
+                    <input type="text" class="otp-input" id="ao6" maxlength="1" oninput="adminVerifyOtp()" onkeydown="aoBack(this,6,event)">
+                </div>
+                <button class="btn-primary full" onclick="adminVerifyOtp()">Verify & Login</button>
+                <div style="margin-top:8px;font-size:10px;color:var(--text3)" id="adminOtpTimer"></div>
             </div>
         </div>
     </div>

@@ -1,6 +1,8 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 const Product = require('./models/Product');
+const User = require('./models/User');
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/krithi-ai';
 
@@ -36,6 +38,24 @@ async function seed() {
     const products = PRODUCTS.map(({id, ...rest}) => rest);
     await Product.insertMany(products);
     console.log(`Seeded ${products.length} products`);
+
+    // Seed admin user
+    const adminEmail = 'admin@krithi.ai';
+    const existingAdmin = await User.findOne({ email: adminEmail });
+    if (!existingAdmin) {
+      const hashedPassword = await bcrypt.hash('admin123', 10);
+      await User.create({
+        name: 'Admin',
+        email: adminEmail,
+        password: hashedPassword,
+        phone: '+91 9876543210',
+        role: 'admin'
+      });
+      console.log('Admin user created: admin@krithi.ai / admin123');
+    } else {
+      console.log('Admin user already exists');
+    }
+
     await mongoose.disconnect();
     console.log('Done!');
   } catch (err) {
