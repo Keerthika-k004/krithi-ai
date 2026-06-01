@@ -401,7 +401,7 @@ if(currentUser){let u=registeredUsers.find(x=>x.email===currentUser.email);if(u)
 saveState();
 toast('Order placed! ID: '+oid);
 showSection('home');
-callAPI('POST','/api/orders',{items:items.map(n=>{let p=PRODUCTS.find(x=>x.name===n);return{product:p?p.id:null,name:n,price:p?p.price:0,qty:1}}),total:order.total,status:'Processing'}).catch(()=>{})}
+fetch(API_BASE+'/api/orders',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({items:items.map(n=>{let p=PRODUCTS.find(x=>x.name===n);return{product:String(p?p.id:''),name:n,price:p?p.price:0,qty:1}}),total:order.total,status:'Processing',user:currentUser?currentUser.name:'Guest'})}).catch(()=>{})}
 
 // ---- Admin ----
 function showAdminPanel(){
