@@ -162,11 +162,11 @@ router.post('/register', async (req, res) => {
     }
     const existing = await User.findOne({ email: email.toLowerCase() });
     if (existing) {
-      return res.json({ success: true, user: { name: existing.name, email: existing.email, phone: existing.phone }, message: 'User already exists' });
+      return res.json({ success: true, user: { name: existing.name, email: existing.email, phone: existing.phone, lastLogin: existing.lastLogin, orderCount: existing.orderCount, totalSpent: existing.totalSpent }, message: 'User already exists' });
     }
     const hashedPassword = password ? await bcrypt.hash(password, 10) : undefined;
-    const user = await User.create({ name, email: email.toLowerCase(), phone, password: hashedPassword });
-    res.status(201).json({ success: true, user: { name: user.name, email: user.email, phone: user.phone } });
+    const user = await User.create({ name, email: email.toLowerCase(), phone, password: hashedPassword, lastLogin: new Date() });
+    res.status(201).json({ success: true, user: { name: user.name, email: user.email, phone: user.phone, lastLogin: user.lastLogin, orderCount: 0, totalSpent: 0 } });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -183,7 +183,35 @@ router.post('/login', async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: 'User not found. Please register first.' });
     }
-    res.json({ success: true, user: { name: user.name, email: user.email, phone: user.phone } });
+    user.lastLogin = new Date();
+    await user.save();
+    res.json({ success: true, user: { name: user.name, email: user.email, phone: user.phone, lastLogin: user.lastLogin, orderCount: user.orderCount, totalSpent: user.totalSpent } });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// GET /api/auth/users
+router.get('/users', async (req, res) => {
+  try {
+    const users = await User.find({}, 'name email phone role lastLogin orderCount totalSpent createdAt').sort({ createdAt: -1 });
+    res.json({ success: true, users });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// PATCH /api/auth/user/order-stats
+router.patch('/user/order-stats', async (req, res) => {
+  try {
+    const { email, total } = req.body;
+    if (!email) return res.status(400).json({ error: 'Email required' });
+    const user = await User.findOne({ email: email.toLowerCase() });
+    if (!user) return res.status(404).json({ error: 'User not found' });
+    user.orderCount = (user.orderCount || 0) + 1;
+    user.totalSpent = (user.totalSpent || 0) + (total || 0);
+    await user.save();
+    res.json({ success: true, orderCount: user.orderCount, totalSpent: user.totalSpent });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
