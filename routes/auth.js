@@ -39,7 +39,7 @@ router.post('/admin/login', async (req, res) => {
         if (match) validUser = user;
       }
     } catch (dbErr) {
-      // MongoDB unavailable — fallback to hardcoded admin
+      // MongoDB unavailable â€” fallback to hardcoded admin
       console.log('MongoDB unavailable, using fallback auth');
     }
 
@@ -60,7 +60,7 @@ router.post('/admin/login', async (req, res) => {
       attempts: 0
     });
 
-    console.log(`\n🔐 ADMIN OTP for ${email}: ${otp}\n`);
+    console.log(`\nðŸ” ADMIN OTP for ${email}: ${otp}\n`);
 
     res.json({
       success: true,
@@ -101,7 +101,7 @@ router.post('/admin/verify-otp', async (req, res) => {
       return res.status(401).json({ error: 'Invalid OTP' });
     }
 
-    // OTP verified — create session
+    // OTP verified â€” create session
     otpStore.delete(email.toLowerCase());
     let sessionUser = null;
     try {
@@ -151,6 +151,42 @@ router.post('/admin/logout', (req, res) => {
     sessionStore.delete(auth.slice(7));
   }
   res.json({ success: true });
+});
+
+// POST /api/auth/register
+router.post('/register', async (req, res) => {
+  try {
+    const { name, email, phone, password } = req.body;
+    if (!name || !email) {
+      return res.status(400).json({ error: 'Name and email required' });
+    }
+    const existing = await User.findOne({ email: email.toLowerCase() });
+    if (existing) {
+      return res.json({ success: true, user: { name: existing.name, email: existing.email, phone: existing.phone }, message: 'User already exists' });
+    }
+    const hashedPassword = password ? await bcrypt.hash(password, 10) : undefined;
+    const user = await User.create({ name, email: email.toLowerCase(), phone, password: hashedPassword });
+    res.status(201).json({ success: true, user: { name: user.name, email: user.email, phone: user.phone } });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /api/auth/login
+router.post('/login', async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) {
+      return res.status(400).json({ error: 'Email required' });
+    }
+    const user = await User.findOne({ email: email.toLowerCase() });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found. Please register first.' });
+    }
+    res.json({ success: true, user: { name: user.name, email: user.email, phone: user.phone } });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 module.exports = router;
