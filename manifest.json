@@ -1,5 +1,6 @@
 {
-  "name": "KRITHI AI â€” Shop Smarter with AI",
+  "id": "/krithi-ai/",
+  "name": "KRITHI AI — Shop Smarter with AI",
   "short_name": "KRITHI AI",
   "description": "India's AI-powered e-commerce platform with personalized deals and 24x7 KRITHI Care support.",
   "start_url": "/krithi-ai/index.html",
@@ -22,11 +23,60 @@
       "purpose": "any maskable"
     }
   ],
-  "screenshots": [],
+  "screenshots": [
+    {
+      "src": "screenshot-1.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Home page of KRITHI AI"
+    }
+  ],
   "categories": ["shopping", "lifestyle", "ai"],
   "lang": "en-IN",
   "scope": "/krithi-ai/",
   "edge_side_panel": {
     "preferred_width": 480
-  }
+  },
+  "shortcuts": [
+    {
+      "name": "Search Products",
+      "short_name": "Search",
+      "url": "/krithi-ai/index.html?q=",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png",
+          "purpose": "any"
+        }
+      ]
+    },
+    {
+      "name": "My Orders",
+      "short_name": "Orders",
+      "url": "/krithi-ai/index.html#orders",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png",
+          "purpose": "any"
+        }
+      ]
+    },
+    {
+      "name": "Contact Support",
+      "short_name": "Support",
+      "url": "/krithi-ai/index.html#contact",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png",
+          "purpose": "any"
+        }
+      ]
+    }
+  ]
 }
