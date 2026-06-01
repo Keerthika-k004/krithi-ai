@@ -716,15 +716,25 @@ document.getElementById(openId).classList.remove('hidden')}
 
 function doLogin(){
 let email=document.getElementById('loginEmail').value||'demo@krithi.ai';
-let existing=registeredUsers.find(u=>u.email===email);
-if(existing){existing.lastLogin=new Date().toISOString();currentUser={name:existing.name,email,phone:existing.phone}
-}else{currentUser={name:'Demo User',email}}
+callAPI('POST','/api/auth/login',{email}).then(data=>{
+  if(data.success){
+    let u=data.user;
+    let existing=registeredUsers.find(x=>x.email===u.email);
+    if(existing){existing.lastLogin=new Date().toISOString();existing.name=u.name;existing.phone=u.phone||existing.phone}
+    else{registeredUsers.push({name:u.name,email:u.email,phone:u.phone||'-',registeredAt:new Date().toISOString(),lastLogin:new Date().toISOString(),orderCount:0,totalSpent:0});saveState()}
+    currentUser={name:u.name,email:u.email,phone:u.phone};
+    applyLoginUI()}
+}).catch(()=>{
+  let existing=registeredUsers.find(u=>u.email===email);
+  if(existing){existing.lastLogin=new Date().toISOString();currentUser={name:existing.name,email,phone:existing.phone}
+  }else{currentUser={name:'Demo User',email}}
+  applyLoginUI()})}
+function applyLoginUI(){
 document.getElementById('navUserName').textContent='Hi, '+(currentUser.name||'Demo').split(' ')[0];
 document.getElementById('dropdownHeader').innerHTML='<span>Welcome, '+(currentUser.name||'Demo User')+'</span>';
 document.getElementById('logoutBtn').classList.remove('hidden');
 document.getElementById('navLogoutBtn')&&document.getElementById('navLogoutBtn').classList.remove('hidden');
 closeAllModals();saveState();toast('Welcome back, '+currentUser.name+'!')}
-
 function demoLogin(){
 document.getElementById('loginEmail').value='demo@krithi.ai';
 document.getElementById('loginPassword').value='password123';
@@ -875,11 +885,19 @@ function doRegister(){
 let name=document.getElementById('regName').value||'Demo User';
 let email=document.getElementById('regEmail').value||'demo@krithi.ai';
 let phone=document.getElementById('regPhone').value||'-';
+let password=document.getElementById('regPassword').value;
 let now=new Date().toISOString();
-let existing=registeredUsers.find(u=>u.email===email);
-if(!existing){
-  registeredUsers.push({name,email,phone,registeredAt:now,lastLogin:now,orderCount:0,totalSpent:0});
-  saveState()}
+callAPI('POST','/api/auth/register',{name,email,phone,password}).then(data=>{
+  if(data.success){
+    let u=data.user;
+    registeredUsers.push({name:u.name,email:u.email,phone:u.phone||'-',registeredAt:now,lastLogin:now,orderCount:0,totalSpent:0});
+    saveState();applyRegisterUI(u.name,u.email,u.phone)}
+  else{toast(data.error||'Registration failed')}
+}).catch(()=>{
+  if(!registeredUsers.find(u=>u.email===email)){
+    registeredUsers.push({name,email,phone,registeredAt:now,lastLogin:now,orderCount:0,totalSpent:0});saveState()}
+  applyRegisterUI(name,email,phone)})}
+function applyRegisterUI(name,email,phone){
 currentUser={name,email,phone};
 document.getElementById('navUserName').textContent='Hi, '+name.split(' ')[0];
 document.getElementById('dropdownHeader').innerHTML='<span>Welcome, '+name+'</span>';
@@ -1127,6 +1145,11 @@ function dismissInstallBanner(){
 function init(){
 loadState();loadAdminState();
 seedReviews();
+fetch(API_BASE+'/api/products').then(r=>r.json()).then(data=>{
+  if(data&&data.products&&data.products.length){
+    PRODUCTS.length=0;data.products.forEach((p,i)=>{PRODUCTS.push({id:i+1,...p,_id:undefined,__v:undefined})});
+    renderDeals();renderProducts(getFilteredProducts());renderWishlist();renderOrdersList()}
+}).catch(()=>{});
 renderDeals();updateDealTimer();setInterval(updateDealTimer,1000);
 renderProducts(getFilteredProducts());
 updateCartCount();
