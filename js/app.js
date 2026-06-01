@@ -726,18 +726,20 @@ document.getElementById(openId).classList.remove('hidden')}
 function doLogin(){
 let email=document.getElementById('loginEmail').value||'demo@krithi.ai';
 callAPI('POST','/api/auth/login',{email}).then(data=>{
-  if(data.success){
+  if(data&&data.success){
     let u=data.user;
     let existing=registeredUsers.find(x=>x.email===u.email);
     if(existing){existing.lastLogin=new Date().toISOString();existing.name=u.name;existing.phone=u.phone||existing.phone}
-    else{registeredUsers.push({name:u.name,email:u.email,phone:u.phone||'-',registeredAt:new Date().toISOString(),lastLogin:new Date().toISOString(),orderCount:0,totalSpent:0});saveState()}
+    else{registeredUsers.push({name:u.name,email:u.email,phone:u.phone||'-',registeredAt:new Date().toISOString(),lastLogin:new Date().toISOString(),orderCount:(u.orderCount||0),totalSpent:(u.totalSpent||0)});saveState()}
     currentUser={name:u.name,email:u.email,phone:u.phone};
     applyLoginUI()}
-}).catch(()=>{
-  let existing=registeredUsers.find(u=>u.email===email);
-  if(existing){existing.lastLogin=new Date().toISOString();currentUser={name:existing.name,email,phone:existing.phone}
-  }else{currentUser={name:'Demo User',email}}
-  applyLoginUI()})}
+  else fallbackLogin(email)
+}).catch(()=>{fallbackLogin(email)})}
+function fallbackLogin(email){
+let existing=registeredUsers.find(u=>u.email===email);
+if(existing){existing.lastLogin=new Date().toISOString();currentUser={name:existing.name,email,phone:existing.phone}
+}else{currentUser={name:'Demo User',email}}
+applyLoginUI()}
 function applyLoginUI(){
 document.getElementById('navUserName').textContent='Hi, '+(currentUser.name||'Demo').split(' ')[0];
 document.getElementById('dropdownHeader').innerHTML='<span>Welcome, '+(currentUser.name||'Demo User')+'</span>';
@@ -1049,10 +1051,9 @@ function checkAPI(){
   .catch(()=>{apiAvailable=false})}
 
 function callAPI(method,endpoint,data){
-  if(!apiAvailable)return Promise.reject('API not available');
   let opts={method,headers:{'Content-Type':'application/json'}};
   if(data)opts.body=JSON.stringify(data);
-  return fetch(API_BASE+endpoint,opts).then(r=>r.json()).catch(()=>{apiAvailable=false;return Promise.reject('API error')})}
+  return fetch(API_BASE+endpoint,opts).then(r=>{apiAvailable=true;return r.json()}).catch(()=>{apiAvailable=false;return Promise.reject('API not available')})}
 
 // ---- Init ----
 function requireAdminReauth(callback){
