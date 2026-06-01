@@ -307,7 +307,7 @@ let rating=sel?parseInt(sel.value):5;
 if(!reviews[pid])reviews[pid]=[];
 reviews[pid].unshift({user:(currentUser?currentUser.name:'Guest'),text:inp.value.trim(),rating,date:new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short'})});
 inp.value='';saveState();showProductDetail(pid);toast('Review posted!');
-callAPI('POST','/api/reviews',{product:pid,user:(currentUser?currentUser.name:'Guest'),text:reviews[pid][0].text,rating}).catch(()=>{})}
+fetch(API_BASE+'/api/reviews',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({product:String(pid),user:(currentUser?currentUser.name:'Guest'),text:reviews[pid][0].text,rating})}).catch(()=>{})}
 
 // ---- Orders ----
 function renderOrdersList(){
