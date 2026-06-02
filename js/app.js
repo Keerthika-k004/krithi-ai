@@ -480,10 +480,20 @@ return '<label style="display:flex;align-items:center;gap:10px;padding:8px 10px;
 }).join('')+'</div></div>'+
 // Password Change
 '<div style="background:var(--bg3);border-radius:10px;padding:16px"><h3 style="font-size:13px;margin-bottom:12px;display:flex;align-items:center;gap:6px"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Change Password</h3>'+
+'<div id="pwStep1">'+
 '<div style="display:flex;gap:8px;align-items:end">'+
-'<div style="flex:1"><label style="font-size:10px;color:var(--text3)">Current Password</label><input type="password" id="curPass" placeholder="••••••••" class="form-input" style="padding:7px 10px;font-size:12px"></div>'+
-'<div style="flex:1"><label style="font-size:10px;color:var(--text3)">New Password</label><input type="password" id="newPass" placeholder="Min 8 characters" class="form-input" style="padding:7px 10px;font-size:12px"></div>'+
-'<button onclick="changeAdminPassword()" style="background:var(--violet);border:none;color:#fff;padding:7px 16px;border-radius:6px;cursor:pointer;font-size:11px;font-family:Inter,sans-serif;font-weight:600;white-space:nowrap">Update</button>'+
+'<div style="flex:1"><label style="font-size:10px;color:var(--text3)">Current Password</label><input type="password" id="curPass" placeholder="Enter current password" class="form-input" style="padding:7px 10px;font-size:12px" onkeypress="if(event.key===\'Enter\')verifyCurrentPassword()"></div>'+
+'<button onclick="verifyCurrentPassword()" id="verifyPwBtn" style="background:var(--violet);border:none;color:#fff;padding:7px 16px;border-radius:6px;cursor:pointer;font-size:11px;font-family:Inter,sans-serif;font-weight:600;white-space:nowrap">Verify</button>'+
+'</div>'+
+'<div id="pwVerifyMsg" style="font-size:10px;color:var(--text3);margin-top:4px"></div>'+
+'</div>'+
+'<div id="pwStep2" style="display:none;margin-top:10px">'+
+'<div style="display:flex;gap:8px;align-items:end;flex-wrap:wrap">'+
+'<div style="flex:1;min-width:120px"><label style="font-size:10px;color:var(--text3)">New Password</label><input type="password" id="newPass" placeholder="Min 8 characters" class="form-input" style="padding:7px 10px;font-size:12px"></div>'+
+'<div style="flex:1;min-width:120px"><label style="font-size:10px;color:var(--text3)">Confirm New Password</label><input type="password" id="confirmPass" placeholder="Re-enter new password" class="form-input" style="padding:7px 10px;font-size:12px" onkeypress="if(event.key===\'Enter\')changeAdminPassword()"></div>'+
+'<button onclick="changeAdminPassword()" id="updatePwBtn" style="background:var(--green);border:none;color:#fff;padding:7px 16px;border-radius:6px;cursor:pointer;font-size:11px;font-family:Inter,sans-serif;font-weight:600;white-space:nowrap">Update</button>'+
+'</div>'+
+'<div id="pwUpdateMsg" style="font-size:10px;color:var(--text3);margin-top:4px"></div>'+
 '</div></div>'+
 // Add Product
 '<div style="background:var(--bg3);border-radius:10px;padding:16px" id="addProductCard"><h3 style="font-size:13px;margin-bottom:12px;display:flex;align-items:center;gap:6px"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add New Product</h3>'+
@@ -1101,16 +1111,37 @@ document.getElementById('adminEmailStatus').textContent='Email updated successfu
 let m=document.getElementById('changeEmailOtpModal');if(m)m.remove();toast('Email updated to '+d.email)
 }else{document.getElementById('ceOtpError').textContent=d.error||'Verification failed';document.getElementById('ceOtpError').style.display='block'}
 }).catch(()=>{document.getElementById('ceOtpError').textContent='Server unavailable';document.getElementById('ceOtpError').style.display='block'})}
+function verifyCurrentPassword(){
+let cur=document.getElementById('curPass');let msg=document.getElementById('pwVerifyMsg');
+if(!cur||!cur.value.trim()){msg.textContent='Please enter your current password';msg.style.color='var(--red)';return}
+msg.textContent='Verifying...';msg.style.color='var(--text3)';
+fetch(API_BASE+'/api/auth/admin/verify-password',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:adminSettings.adminEmail,password:cur.value})})
+.then(r=>r.json()).then(d=>{
+if(d.valid){
+msg.textContent='✓ Current password verified';msg.style.color='var(--mint)';
+document.getElementById('pwStep1').style.display='none';
+document.getElementById('pwStep2').style.display='block';
+setTimeout(()=>document.getElementById('newPass').focus(),100)
+}else{msg.textContent=d.error||'Incorrect password';msg.style.color='var(--red)'}
+}).catch(()=>{msg.textContent='Server unavailable. Check fallback: try "admin123"';msg.style.color='var(--amber)'})}
 function changeAdminPassword(){
-let cur=document.getElementById('curPass');let nw=document.getElementById('newPass');
-if(!cur||!nw)return;
-requireAdminReauth(()=>{
-if(nw.value.length<8){toast('New password must be at least 8 characters');return}
+let cur=document.getElementById('curPass');let nw=document.getElementById('newPass');let cf=document.getElementById('confirmPass');let msg=document.getElementById('pwUpdateMsg');
+if(!nw||!cf)return;
+if(nw.value.length<8){msg.textContent='New password must be at least 8 characters';msg.style.color='var(--red)';return}
+if(nw.value!==cf.value){msg.textContent='Passwords do not match';msg.style.color='var(--red)';return}
+msg.textContent='Updating...';msg.style.color='var(--text3)';
 fetch(API_BASE+'/api/auth/admin/change-password',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:adminSettings.adminEmail,currentPassword:cur.value,newPassword:nw.value})})
 .then(r=>r.json()).then(d=>{
-if(d.success){toast('Password updated successfully!');adminAudit('password_changed',adminSettings.adminEmail);cur.value='';nw.value=''}
-else toast(d.error||'Failed to update password')})
-.catch(()=>toast('Server unavailable. Password not changed.'))})}
+if(d.success){toast('Password updated successfully!');adminAudit('password_changed',adminSettings.adminEmail);msg.textContent='✓ Password updated';msg.style.color='var(--mint)';setTimeout(()=>resetPasswordForm(),2000)}
+else msg.textContent=d.error||'Failed to update password'})
+.catch(()=>{msg.textContent='Server unavailable. Password not changed.';msg.style.color='var(--red)'})}
+function resetPasswordForm(){
+let s1=document.getElementById('pwStep1');let s2=document.getElementById('pwStep2');
+if(s1)s1.style.display='block';if(s2)s2.style.display='none';
+let cur=document.getElementById('curPass');let nw=document.getElementById('newPass');let cf=document.getElementById('confirmPass');let msg=document.getElementById('pwVerifyMsg');
+if(cur)cur.value='';if(nw)nw.value='';if(cf)cf.value='';
+if(msg){msg.textContent='';msg.style.color='var(--text3)'}
+let msg2=document.getElementById('pwUpdateMsg');if(msg2){msg2.textContent='';msg2.style.color='var(--text3)'}}
 
 function addNewProduct(){
 let name=document.getElementById('apName');if(!name)return;
