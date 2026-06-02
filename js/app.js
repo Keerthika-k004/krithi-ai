@@ -914,11 +914,12 @@ callAPI('POST','/api/auth/register',{name,email,phone,password}).then(data=>{
     let u=data.user;
     registeredUsers.push({name:u.name,email:u.email,phone:u.phone||'-',registeredAt:now,lastLogin:now,orderCount:0,totalSpent:0});
     saveState();applyRegisterUI(u.name,u.email,u.phone)}
-  else{toast(data.error||'Registration failed')}
-}).catch(()=>{
-  if(!registeredUsers.find(u=>u.email===email)){
-    registeredUsers.push({name,email,phone,registeredAt:now,lastLogin:now,orderCount:0,totalSpent:0});saveState()}
-  applyRegisterUI(name,email,phone)})}
+  else{toast(data.error||'Registration failed');if(data.error&&data.error.includes('Database')){catchFallbackRegister(name,email,phone,now)}}
+}).catch(()=>{catchFallbackRegister(name,email,phone,now)})}
+function catchFallbackRegister(name,email,phone,now){
+if(!registeredUsers.find(u=>u.email===email)){
+  registeredUsers.push({name,email,phone,registeredAt:now||new Date().toISOString(),lastLogin:now||new Date().toISOString(),orderCount:0,totalSpent:0});saveState()}
+applyRegisterUI(name,email,phone)}
 function applyRegisterUI(name,email,phone){
 currentUser={name,email,phone};
 document.getElementById('navUserName').textContent='Hi, '+name.split(' ')[0];
