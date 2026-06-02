@@ -2,7 +2,10 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
+const mongoose = require('mongoose');
 const User = require('../models/User');
+
+function dbReady() { return mongoose.connection.readyState === 1; }
 
 // In-memory stores (lifetime of server process)
 const otpStore = new Map();   // email -> { otp, expiresAt, attempts }
@@ -32,15 +35,16 @@ router.post('/admin/login', async (req, res) => {
 
     let validUser = null;
 
-    try {
-      const user = await User.findOne({ email: email.toLowerCase(), role: 'admin' });
-      if (user) {
-        const match = await bcrypt.compare(password, user.password);
-        if (match) validUser = user;
+    if (dbReady()) {
+      try {
+        const user = await User.findOne({ email: email.toLowerCase(), role: 'admin' });
+        if (user) {
+          const match = await bcrypt.compare(password, user.password);
+          if (match) validUser = user;
+        }
+      } catch (dbErr) {
+        console.log('MongoDB error, using fallback auth');
       }
-    } catch (dbErr) {
-      // MongoDB unavailable â€” fallback to hardcoded admin
-      console.log('MongoDB unavailable, using fallback auth');
     }
 
     if (!validUser) {
@@ -60,7 +64,7 @@ router.post('/admin/login', async (req, res) => {
       attempts: 0
     });
 
-    console.log(`\nðŸ” ADMIN OTP for ${email}: ${otp}\n`);
+    console.log(`\n🔐 ADMIN OTP for ${email}: ${otp}\n`);
 
     res.json({
       success: true,
@@ -101,12 +105,14 @@ router.post('/admin/verify-otp', async (req, res) => {
       return res.status(401).json({ error: 'Invalid OTP' });
     }
 
-    // OTP verified â€” create session
+    // OTP verified — create session
     otpStore.delete(email.toLowerCase());
     let sessionUser = null;
-    try {
-      sessionUser = await User.findOne({ email: email.toLowerCase(), role: 'admin' });
-    } catch (e) {}
+    if (dbReady()) {
+      try {
+        sessionUser = await User.findOne({ email: email.toLowerCase(), role: 'admin' });
+      } catch (e) {}
+    }
     if (!sessionUser) {
       sessionUser = { email: email.toLowerCase(), name: 'Admin', role: 'admin' };
     }
@@ -160,6 +166,9 @@ router.post('/register', async (req, res) => {
     if (!name || !email) {
       return res.status(400).json({ error: 'Name and email required' });
     }
+    if (!dbReady()) {
+      return res.status(503).json({ error: 'Database unavailable. Registration saved locally.' });
+    }
     const existing = await User.findOne({ email: email.toLowerCase() });
     if (existing) {
       return res.json({ success: true, user: { name: existing.name, email: existing.email, phone: existing.phone, lastLogin: existing.lastLogin, orderCount: existing.orderCount, totalSpent: existing.totalSpent }, message: 'User already exists' });
@@ -179,6 +188,9 @@ router.post('/login', async (req, res) => {
     if (!email) {
       return res.status(400).json({ error: 'Email required' });
     }
+    if (!dbReady()) {
+      return res.status(503).json({ error: 'Database unavailable. Using local storage.' });
+    }
     const user = await User.findOne({ email: email.toLowerCase() });
     if (!user) {
       return res.status(404).json({ error: 'User not found. Please register first.' });
@@ -194,6 +206,9 @@ router.post('/login', async (req, res) => {
 // GET /api/auth/users
 router.get('/users', async (req, res) => {
   try {
+    if (!dbReady()) {
+      return res.json({ success: true, users: [] });
+    }
     const users = await User.find({}, 'name email phone role lastLogin orderCount totalSpent createdAt').sort({ createdAt: -1 });
     res.json({ success: true, users });
   } catch (err) {
@@ -206,12 +221,138 @@ router.patch('/user/order-stats', async (req, res) => {
   try {
     const { email, total } = req.body;
     if (!email) return res.status(400).json({ error: 'Email required' });
+    if (!dbReady()) {
+      return res.status(503).json({ error: 'Database unavailable. Stats saved locally.' });
+    }
     const user = await User.findOne({ email: email.toLowerCase() });
     if (!user) return res.status(404).json({ error: 'User not found' });
     user.orderCount = (user.orderCount || 0) + 1;
     user.totalSpent = (user.totalSpent || 0) + (total || 0);
     await user.save();
     res.json({ success: true, orderCount: user.orderCount, totalSpent: user.totalSpent });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /api/auth/admin/change-password
+router.post('/admin/change-password', async (req, res) => {
+  try {
+    const { email, currentPassword, newPassword } = req.body;
+    if (!email || !currentPassword || !newPassword) {
+      return res.status(400).json({ error: 'Email, current password, and new password required' });
+    }
+    if (newPassword.length < 8) {
+      return res.status(400).json({ error: 'New password must be at least 8 characters' });
+    }
+
+    let updated = false;
+
+    if (dbReady()) {
+      try {
+        const user = await User.findOne({ email: email.toLowerCase(), role: 'admin' });
+      if (user) {
+        const match = await bcrypt.compare(currentPassword, user.password);
+        if (!match) {
+          return res.status(401).json({ error: 'Current password is incorrect' });
+        }
+        user.password = await bcrypt.hash(newPassword, 10);
+        await user.save();
+        updated = true;
+      }
+      } catch (dbErr) {
+        console.log('MongoDB error for password change');
+      }
+    }
+
+    if (!updated) {
+      if (email.toLowerCase() === FALLBACK_ADMIN.email && currentPassword === FALLBACK_ADMIN.password) {
+        FALLBACK_ADMIN.password = newPassword;
+        updated = true;
+      }
+    }
+
+    if (!updated) {
+      return res.status(401).json({ error: 'Current password is incorrect' });
+    }
+
+    res.json({ success: true, message: 'Password updated successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /api/auth/admin/send-change-email-otp
+router.post('/admin/send-change-email-otp', async (req, res) => {
+  try {
+    const { newEmail } = req.body;
+    if (!newEmail) {
+      return res.status(400).json({ error: 'New email required' });
+    }
+
+    const otp = generateOTP();
+    otpStore.set(newEmail.toLowerCase(), {
+      otp,
+      expiresAt: Date.now() + OTP_EXPIRY,
+      attempts: 0
+    });
+
+    const { sendOTP } = require('../utils/email');
+    const result = await sendOTP(newEmail, otp);
+
+    res.json({
+      success: true,
+      message: result.sent ? 'OTP sent to ' + newEmail : 'OTP generated (email not configured)',
+      _demo: result.demo ? { otp } : undefined
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /api/auth/admin/verify-change-email
+router.post('/admin/verify-change-email', async (req, res) => {
+  try {
+    const { newEmail, otp, currentEmail } = req.body;
+    if (!newEmail || !otp) {
+      return res.status(400).json({ error: 'New email and OTP required' });
+    }
+
+    const record = otpStore.get(newEmail.toLowerCase());
+    if (!record) {
+      return res.status(400).json({ error: 'No OTP requested for this email' });
+    }
+    if (Date.now() > record.expiresAt) {
+      otpStore.delete(newEmail.toLowerCase());
+      return res.status(400).json({ error: 'OTP expired' });
+    }
+    if (record.otp !== otp) {
+      record.attempts++;
+      return res.status(401).json({ error: 'Invalid OTP' });
+    }
+
+    otpStore.delete(newEmail.toLowerCase());
+
+    // Update admin email in MongoDB (only if connected)
+    if (dbReady()) {
+      try {
+        await User.updateOne(
+          { email: currentEmail?.toLowerCase() || 'admin@krithi.ai', role: 'admin' },
+          { $set: { email: newEmail.toLowerCase() } }
+        );
+      } catch (dbErr) {
+        console.log('MongoDB error for email change');
+      }
+    }
+
+    // Update fallback
+    FALLBACK_ADMIN.email = newEmail.toLowerCase();
+
+    res.json({
+      success: true,
+      message: 'Email updated successfully',
+      email: newEmail.toLowerCase()
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
