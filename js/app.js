@@ -458,7 +458,8 @@ el.innerHTML=sidebar+'<h2>⚙️ Admin Settings</h2><div style="display:grid;gap
 // Profile Card
 '<div style="background:var(--bg3);border-radius:10px;padding:16px"><h3 style="font-size:13px;margin-bottom:12px;display:flex;align-items:center;gap:6px"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Admin Profile</h3>'+
 '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">'+
-'<div><label style="font-size:10px;color:var(--text3)">Email</label><div style="font-size:12px;padding:8px 10px;background:var(--bg4);border-radius:6px;color:var(--violet-dim)">'+adminSettings.adminEmail+'</div></div>'+
+'<div><label style="font-size:10px;color:var(--text3)">Email</label><div style="display:flex;gap:6px"><input id="adminEmailField" value="'+adminSettings.adminEmail+'" class="form-input" style="flex:1;padding:7px 10px;font-size:12px"><button onclick="sendChangeEmailOtp()" style="background:var(--violet);border:none;color:#fff;padding:7px 12px;border-radius:6px;cursor:pointer;font-size:10px;font-family:Inter,sans-serif;font-weight:600;white-space:nowrap">Change</button></div>'+
+'<div id="adminEmailStatus" style="font-size:10px;color:var(--text3);margin-top:4px"></div></div>'+
 '<div><label style="font-size:10px;color:var(--text3)">Role</label><div style="font-size:12px;padding:8px 10px;background:var(--bg4);border-radius:6px;color:var(--mint)">Super Admin</div></div>'+
 '</div></div>'+
 // Store Settings
@@ -1066,14 +1067,50 @@ adminAudit('reauth_verified','Sensitive action authorized');
 callback()};
 showModal('confirmModal')}
 
+let pendingNewEmail=null;
+function sendChangeEmailOtp(){
+let inp=document.getElementById('adminEmailField');
+let status=document.getElementById('adminEmailStatus');
+let email=inp.value.trim();
+if(!email||!email.includes('@')){status.textContent='Please enter a valid email';status.style.color='var(--red)';return}
+status.textContent='Sending OTP...';status.style.color='var(--text3)';
+fetch(API_BASE+'/api/auth/admin/send-change-email-otp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({newEmail:email})})
+.then(r=>r.json()).then(d=>{
+if(d.success){
+pendingNewEmail=email;
+if(d._demo&&d._demo.otp)showChangeEmailOtpModal(d._demo.otp);
+else{status.textContent='OTP sent to '+email;status.style.color='var(--mint)';showChangeEmailOtpModal()}
+}else status.textContent=d.error||'Failed to send OTP'})
+.catch(()=>{status.textContent='Server unavailable';status.style.color='var(--red)'})}
+function showChangeEmailOtpModal(demoOtp){
+let existing=document.getElementById('changeEmailOtpModal');
+if(existing)existing.remove();
+let div=document.createElement('div');div.id='changeEmailOtpModal';div.className='modal-overlay';div.onclick=function(){this.remove()};
+div.innerHTML='<div class="modal" style="max-width:380px" onclick="event.stopPropagation()"><div class="modal-right" style="text-align:center;padding:24px"><button class="modal-close" onclick="this.closest(\'.modal-overlay\').remove()">✕</button><h3 style="font-size:14px;margin-bottom:4px">Verify New Email</h3><div style="font-size:11px;color:var(--text2);margin-bottom:12px">OTP sent to <strong>'+pendingNewEmail+'</strong>'+(demoOtp?'<br><span style="color:var(--amber);font-size:10px">Demo OTP: '+demoOtp+'</span>':'')+'</div><div id="ceOtpError" style="font-size:11px;color:var(--red);margin-bottom:8px;display:none"></div><div style="display:flex;gap:6px;justify-content:center;margin:12px 0"><input type="text" class="otp-input" id="ce1" maxlength="1" oninput="ceMove(this,2)" onkeydown="ceBack(this,1,event)" autofocus><input type="text" class="otp-input" id="ce2" maxlength="1" oninput="ceMove(this,3)" onkeydown="ceBack(this,2,event)"><input type="text" class="otp-input" id="ce3" maxlength="1" oninput="ceMove(this,4)" onkeydown="ceBack(this,3,event)"><input type="text" class="otp-input" id="ce4" maxlength="1" oninput="ceMove(this,5)" onkeydown="ceBack(this,4,event)"><input type="text" class="otp-input" id="ce5" maxlength="1" oninput="ceMove(this,6)" onkeydown="ceBack(this,5,event)"><input type="text" class="otp-input" id="ce6" maxlength="1" oninput="ceVerifyOtp()" onkeydown="ceBack(this,6,event)"></div><button class="btn-primary full" onclick="ceVerifyOtp()">Verify & Update Email</button></div></div>';document.body.appendChild(div);setTimeout(()=>document.getElementById('ce1').focus(),100)}
+function ceMove(el,n){if(el.value&&n<=6)document.getElementById('ce'+n).focus()}
+function ceBack(el,n,ev){if(ev.key==='Backspace'&&!el.value&&n>1)document.getElementById('ce'+n).focus()}
+function ceVerifyOtp(){
+let otp='';for(let i=1;i<=6;i++){let inp=document.getElementById('ce'+i);if(inp)otp+=inp.value}
+if(otp.length!==6){document.getElementById('ceOtpError').textContent='Please enter all 6 digits';document.getElementById('ceOtpError').style.display='block';return}
+fetch(API_BASE+'/api/auth/admin/verify-change-email',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({newEmail:pendingNewEmail,otp,currentEmail:adminSettings.adminEmail})})
+.then(r=>r.json()).then(d=>{
+if(d.success){
+adminSettings.adminEmail=d.email;saveAdminState();adminAudit('email_changed',d.email);
+document.getElementById('adminEmailField').value=d.email;
+document.getElementById('adminEmailStatus').textContent='Email updated successfully';document.getElementById('adminEmailStatus').style.color='var(--mint)';
+let m=document.getElementById('changeEmailOtpModal');if(m)m.remove();toast('Email updated to '+d.email)
+}else{document.getElementById('ceOtpError').textContent=d.error||'Verification failed';document.getElementById('ceOtpError').style.display='block'}
+}).catch(()=>{document.getElementById('ceOtpError').textContent='Server unavailable';document.getElementById('ceOtpError').style.display='block'})}
 function changeAdminPassword(){
 let cur=document.getElementById('curPass');let nw=document.getElementById('newPass');
 if(!cur||!nw)return;
 requireAdminReauth(()=>{
-if(cur.value!=='admin123'){toast('Current password is incorrect');return}
 if(nw.value.length<8){toast('New password must be at least 8 characters');return}
-toast('Password updated successfully!');adminAudit('password_changed',adminSettings.adminEmail);
-cur.value='';nw.value=''})}
+fetch(API_BASE+'/api/auth/admin/change-password',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:adminSettings.adminEmail,currentPassword:cur.value,newPassword:nw.value})})
+.then(r=>r.json()).then(d=>{
+if(d.success){toast('Password updated successfully!');adminAudit('password_changed',adminSettings.adminEmail);cur.value='';nw.value=''}
+else toast(d.error||'Failed to update password')})
+.catch(()=>toast('Server unavailable. Password not changed.'))})}
 
 function addNewProduct(){
 let name=document.getElementById('apName');if(!name)return;
