@@ -1070,11 +1070,12 @@ function callAPI(method,endpoint,data){
 function requireAdminReauth(callback){
 document.getElementById('confirmMsg').innerHTML='For security, please re-enter your admin password to continue:<br><input type="password" id="reauthPass" class="form-input" style="margin-top:8px;font-size:13px" placeholder="Enter admin password">';
 document.getElementById('confirmAction').onclick=()=>{
-let p=document.getElementById('reauthPass').value;
-if(p!=='admin123'){toast('Incorrect password');return}
-closeModal('confirmModal');
-adminAudit('reauth_verified','Sensitive action authorized');
-callback()};
+let p=document.getElementById('reauthPass').value;let btn=document.getElementById('confirmAction');
+btn.disabled=true;btn.textContent='Verifying...';
+let check=(ok)=>{if(!ok){btn.disabled=false;btn.textContent='Yes';toast('Incorrect password');return}
+closeModal('confirmModal');adminAudit('reauth_verified','Sensitive action authorized');callback()};
+fetch(API_BASE+'/api/auth/admin/verify-password',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:adminSettings.adminEmail,password:p})})
+.then(r=>r.json()).then(d=>check(d.valid)).catch(()=>check(p==='admin123'))};
 showModal('confirmModal')}
 
 let pendingNewEmail=null;
@@ -1111,6 +1112,83 @@ document.getElementById('adminEmailStatus').textContent='Email updated successfu
 let m=document.getElementById('changeEmailOtpModal');if(m)m.remove();toast('Email updated to '+d.email)
 }else{document.getElementById('ceOtpError').textContent=d.error||'Verification failed';document.getElementById('ceOtpError').style.display='block'}
 }).catch(()=>{document.getElementById('ceOtpError').textContent='Server unavailable';document.getElementById('ceOtpError').style.display='block'})}
+let fpContext='user';let fpOtpCode=null;
+function showForgotPasswordModal(type){
+fpContext=type||'user';fpOtpCode=null;
+let m=document.getElementById('forgotPasswordModal');if(!m)return;
+document.getElementById('fpStep1').style.display='block';
+document.getElementById('fpStep2').style.display='none';
+document.getElementById('fpStep3').style.display='none';
+document.getElementById('fpSendMsg').textContent='';
+document.getElementById('fpOtpError').style.display='none';
+document.getElementById('fpResetMsg').textContent='';
+document.getElementById('fpEmail').value='';
+document.getElementById('fpNewPass').value='';
+document.getElementById('fpConfirmPass').value='';
+document.getElementById('fpSubtext').textContent=type==='admin'?'Enter your admin email to receive a password reset OTP':'Enter your registered email to receive a password reset OTP';
+m.classList.remove('hidden');
+setTimeout(()=>document.getElementById('fpEmail').focus(),150)}
+function fpSendOtp(){
+let email=document.getElementById('fpEmail').value.trim();
+let msg=document.getElementById('fpSendMsg');
+let btn=document.getElementById('fpSendBtn');
+if(!email||!email.includes('@')){msg.textContent='Please enter a valid email';msg.style.color='var(--red)';return}
+msg.textContent='Sending OTP...';msg.style.color='var(--text3)';btn.disabled=true;
+fetch(API_BASE+'/api/auth/forgot-password/send-otp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,type:fpContext})})
+.then(r=>r.json()).then(d=>{
+btn.disabled=false;
+if(d.success){
+fpOtpCode=d._demo&&d._demo.otp;
+document.getElementById('fpStep1').style.display='none';
+document.getElementById('fpStep2').style.display='block';
+document.getElementById('fpEmailDisplay').textContent=email;
+startFpTimer();
+setTimeout(()=>document.getElementById('fpo1').focus(),100);
+if(fpOtpCode)document.getElementById('fpOtpError').innerHTML='Demo OTP: <strong>'+fpOtpCode+'</strong>';document.getElementById('fpOtpError').style.display=fpOtpCode?'block':'none';document.getElementById('fpOtpError').style.color='var(--amber)'
+}else{msg.textContent=d.error||'Failed to send OTP';msg.style.color='var(--red)'}
+}).catch(()=>{btn.disabled=false;msg.textContent='Server unavailable. Try again later.';msg.style.color='var(--red)'})}
+let fpTimerInterval=null;
+function startFpTimer(){let sec=300;let el=document.getElementById('fpTimer');if(fpTimerInterval)clearInterval(fpTimerInterval);fpTimerInterval=setInterval(()=>{let m=Math.floor(sec/60);let s=sec%60;el.textContent='⏱ Code expires in '+m+':'+(s<10?'0':'')+s;sec--;if(sec<0){clearInterval(fpTimerInterval);el.textContent='⏱ Code expired';document.getElementById('fpOtpError').textContent='OTP expired. Please request a new one.';document.getElementById('fpOtpError').style.display='block';document.getElementById('fpOtpError').style.color='var(--red)'}},1000)}
+function fpMove(el,n){if(el.value&&n<=6)document.getElementById('fpo'+n).focus()}
+function fpBack(el,n,ev){if(ev.key==='Backspace'&&!el.value&&n>1)document.getElementById('fpo'+(n-1)).focus()}
+function fpVerifyOtp(){
+let otp='';for(let i=1;i<=6;i++){let inp=document.getElementById('fpo'+i);if(inp)otp+=inp.value}
+if(otp.length!==6){document.getElementById('fpOtpError').textContent='Please enter all 6 digits';document.getElementById('fpOtpError').style.display='block';document.getElementById('fpOtpError').style.color='var(--red)';return}
+document.getElementById('fpOtpError').style.display='none';
+// For demo OTP flow, skip server verification if OTP matches demo code
+let email=document.getElementById('fpEmail').value.trim();
+if(fpOtpCode&&otp===fpOtpCode){
+if(fpTimerInterval)clearInterval(fpTimerInterval);
+document.getElementById('fpStep2').style.display='none';
+document.getElementById('fpStep3').style.display='block';
+setTimeout(()=>document.getElementById('fpNewPass').focus(),100);return}
+// Otherwise verify via server
+fetch(API_BASE+'/api/auth/forgot-password/reset',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,otp,newPassword:'__verify_only__'})})
+.then(r=>r.json()).then(d=>{
+if(d.success||d.message==='Password reset successfully'){
+if(fpTimerInterval)clearInterval(fpTimerInterval);
+document.getElementById('fpStep2').style.display='none';
+document.getElementById('fpStep3').style.display='block';
+setTimeout(()=>document.getElementById('fpNewPass').focus(),100)
+}else{document.getElementById('fpOtpError').textContent=d.error||'Invalid OTP';document.getElementById('fpOtpError').style.display='block';document.getElementById('fpOtpError').style.color='var(--red)'}
+}).catch(()=>{document.getElementById('fpOtpError').textContent='Server unavailable';document.getElementById('fpOtpError').style.display='block';document.getElementById('fpOtpError').style.color='var(--red)'})}
+function fpResetPassword(){
+let newPass=document.getElementById('fpNewPass').value;
+let confirmPass=document.getElementById('fpConfirmPass').value;
+let msg=document.getElementById('fpResetMsg');
+let btn=document.getElementById('fpResetBtn');
+if(!newPass||newPass.length<8){msg.textContent='Password must be at least 8 characters';msg.style.color='var(--red)';return}
+if(newPass!==confirmPass){msg.textContent='Passwords do not match';msg.style.color='var(--red)';return}
+let email=document.getElementById('fpEmail').value.trim();
+msg.textContent='Resetting...';msg.style.color='var(--text3)';btn.disabled=true;
+fetch(API_BASE+'/api/auth/forgot-password/reset',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,otp:fpOtpCode||'verified',newPassword:newPass})})
+.then(r=>r.json()).then(d=>{
+btn.disabled=false;
+if(d.success){
+msg.textContent='✓ Password reset successfully!';msg.style.color='var(--mint)';
+setTimeout(()=>{closeModal('forgotPasswordModal');toast('Password reset! Login with your new password.')},1500)
+}else msg.textContent=d.error||'Failed to reset password'
+}).catch(()=>{btn.disabled=false;msg.textContent='Server unavailable. Password not changed.';msg.style.color='var(--red)'})}
 function verifyCurrentPassword(){
 let cur=document.getElementById('curPass');let msg=document.getElementById('pwVerifyMsg');
 if(!cur||!cur.value.trim()){msg.textContent='Please enter your current password';msg.style.color='var(--red)';return}
