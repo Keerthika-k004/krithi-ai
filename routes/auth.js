@@ -259,6 +259,104 @@ router.post('/admin/verify-password', async (req, res) => {
   }
 });
 
+// POST /api/auth/forgot-password/send-otp
+router.post('/forgot-password/send-otp', async (req, res) => {
+  try {
+    const { email, type } = req.body;
+    if (!email) return res.status(400).json({ error: 'Email required' });
+
+    // Verify user exists (for admin, check admin role; for user, check any user)
+    let exists = false;
+    if (dbReady()) {
+      try {
+        const filter = { email: email.toLowerCase() };
+        if (type === 'admin') filter.role = 'admin';
+        const user = await User.findOne(filter);
+        exists = !!user;
+      } catch (e) {}
+    }
+    // Fallback: allow known admin email
+    if (!exists && type === 'admin' && email.toLowerCase() === FALLBACK_ADMIN.email) {
+      exists = true;
+    }
+    // For regular users without DB, allow any (will be validated on reset)
+    if (!exists && type !== 'admin') exists = true;
+
+    if (!exists) {
+      return res.status(404).json({ error: 'No account found with this email' });
+    }
+
+    const otp = generateOTP();
+    otpStore.set('fp:' + email.toLowerCase(), {
+      otp,
+      expiresAt: Date.now() + OTP_EXPIRY,
+      attempts: 0
+    });
+
+    const { sendOTP } = require('../utils/email');
+    const result = await sendOTP(email, otp);
+
+    res.json({
+      success: true,
+      message: result.sent ? 'OTP sent to ' + email : 'OTP generated (email not configured)',
+      _demo: result.demo ? { otp } : undefined
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /api/auth/forgot-password/reset
+router.post('/forgot-password/reset', async (req, res) => {
+  try {
+    const { email, otp, newPassword } = req.body;
+    if (!email || !otp || !newPassword) {
+      return res.status(400).json({ error: 'Email, OTP, and new password required' });
+    }
+    if (newPassword.length < 8) {
+      return res.status(400).json({ error: 'Password must be at least 8 characters' });
+    }
+
+    const record = otpStore.get('fp:' + email.toLowerCase());
+    if (!record) return res.status(400).json({ error: 'No OTP requested. Please request a new one.' });
+    if (Date.now() > record.expiresAt) {
+      otpStore.delete('fp:' + email.toLowerCase());
+      return res.status(400).json({ error: 'OTP expired. Please request a new one.' });
+    }
+    if (record.otp !== otp) {
+      record.attempts++;
+      return res.status(401).json({ error: 'Invalid OTP' });
+    }
+
+    otpStore.delete('fp:' + email.toLowerCase());
+    let updated = false;
+
+    if (dbReady()) {
+      try {
+        const user = await User.findOne({ email: email.toLowerCase() });
+        if (user) {
+          user.password = await bcrypt.hash(newPassword, 10);
+          await user.save();
+          updated = true;
+        }
+      } catch (e) {}
+    }
+
+    // Update fallback admin password
+    if (!updated && email.toLowerCase() === FALLBACK_ADMIN.email) {
+      FALLBACK_ADMIN.password = newPassword;
+      updated = true;
+    }
+
+    res.json({
+      success: true,
+      message: updated ? 'Password reset successfully' : 'Could not update password in database'
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // POST /api/auth/admin/change-password
 router.post('/admin/change-password', async (req, res) => {
   try {
