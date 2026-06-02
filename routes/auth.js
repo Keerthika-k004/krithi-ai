@@ -235,6 +235,30 @@ router.patch('/user/order-stats', async (req, res) => {
   }
 });
 
+// POST /api/auth/admin/verify-password
+router.post('/admin/verify-password', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Email and password required' });
+    }
+    let valid = false;
+    if (dbReady()) {
+      try {
+        const user = await User.findOne({ email: email.toLowerCase(), role: 'admin' });
+        if (user) valid = await bcrypt.compare(password, user.password);
+      } catch (e) {}
+    }
+    if (!valid && email.toLowerCase() === FALLBACK_ADMIN.email && password === FALLBACK_ADMIN.password) {
+      valid = true;
+    }
+    if (!valid) return res.status(401).json({ error: 'Incorrect password' });
+    res.json({ valid: true, message: 'Password verified' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // POST /api/auth/admin/change-password
 router.post('/admin/change-password', async (req, res) => {
   try {
