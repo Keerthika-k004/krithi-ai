@@ -1,7 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 const Product = require('./models/Product');
 const Order = require('./models/Order');
@@ -12,13 +13,14 @@ const authRoutes = require('./routes/auth');
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(express.static(path.join(__dirname)));
 
 app.use('/api/auth', authRoutes);
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/krithi-ai';
 const PORT = process.env.PORT || 3000;
 
-mongoose.connect(MONGODB_URI)
+mongoose.connect(MONGODB_URI, { serverSelectionTimeoutMS: 5000, connectTimeoutMS: 5000 })
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));
 
