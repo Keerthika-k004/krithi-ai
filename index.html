@@ -576,6 +576,7 @@
                 <div class="form-hint">By continuing, you agree to KRITHI AI's <a href="#">Terms</a> and <a
                         href="#">Privacy Policy</a></div>
                 <button class="btn-primary full" onclick="doLogin()" id="loginBtn">Login</button>
+                <div style="text-align:center;margin-top:8px"><a href="#" onclick="showForgotPasswordModal('user')" style="font-size:11px;color:var(--violet);text-decoration:none">Forgot Password?</a></div>
                 <div class="switch-auth" style="margin-top:6px">New to KRITHI AI? <a href="#"
                         onclick="switchModal('loginModal','registerModal')">Create account</a></div>
             </div>
@@ -616,6 +617,54 @@
         </div>
     </div>
 
+    <!-- FORGOT PASSWORD MODAL -->
+    <div class="modal-overlay hidden" id="forgotPasswordModal" onclick="closeModal('forgotPasswordModal')">
+        <div class="modal" style="max-width:420px" onclick="event.stopPropagation()">
+            <div class="modal-right" style="padding:28px;text-align:center">
+                <button class="modal-close" onclick="closeModal('forgotPasswordModal')">✕</button>
+                <div id="fpStep1">
+                    <h3 style="font-size:15px;margin-bottom:4px">Reset Password</h3>
+                    <p id="fpSubtext" style="font-size:11px;color:var(--text2);margin-bottom:16px"></p>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="fpEmail" placeholder="Enter your email" class="form-input" style="text-align:center" onkeypress="if(event.key==='Enter')fpSendOtp()">
+                    </div>
+                    <div id="fpSendMsg" style="font-size:10px;color:var(--text3);margin-bottom:8px"></div>
+                    <button class="btn-primary full" onclick="fpSendOtp()" id="fpSendBtn">Send OTP</button>
+                </div>
+                <div id="fpStep2" style="display:none">
+                    <h3 style="font-size:15px;margin-bottom:4px">Enter OTP</h3>
+                    <p style="font-size:11px;color:var(--text2);margin-bottom:12px">OTP sent to <span id="fpEmailDisplay" style="color:var(--violet)"></span></p>
+                    <div id="fpOtpError" style="font-size:11px;color:var(--red);margin-bottom:8px;display:none"></div>
+                    <div style="display:flex;gap:6px;justify-content:center;margin:12px 0">
+                        <input type="text" class="otp-input" id="fpo1" maxlength="1" oninput="fpMove(this,2)" onkeydown="fpBack(this,1,event)" autofocus>
+                        <input type="text" class="otp-input" id="fpo2" maxlength="1" oninput="fpMove(this,3)" onkeydown="fpBack(this,2,event)">
+                        <input type="text" class="otp-input" id="fpo3" maxlength="1" oninput="fpMove(this,4)" onkeydown="fpBack(this,3,event)">
+                        <input type="text" class="otp-input" id="fpo4" maxlength="1" oninput="fpMove(this,5)" onkeydown="fpBack(this,4,event)">
+                        <input type="text" class="otp-input" id="fpo5" maxlength="1" oninput="fpMove(this,6)" onkeydown="fpBack(this,5,event)">
+                        <input type="text" class="otp-input" id="fpo6" maxlength="1" oninput="fpVerifyOtp()" onkeydown="fpBack(this,6,event)">
+                    </div>
+                    <button class="btn-primary full" onclick="fpVerifyOtp()" id="fpVerifyBtn">Verify OTP</button>
+                    <div style="margin-top:8px;font-size:10px;color:var(--text3)" id="fpTimer"></div>
+                </div>
+                <div id="fpStep3" style="display:none">
+                    <h3 style="font-size:15px;margin-bottom:4px">New Password</h3>
+                    <p style="font-size:11px;color:var(--text2);margin-bottom:16px">Choose a new password for your account</p>
+                    <div class="form-group">
+                        <label>New Password</label>
+                        <input type="password" id="fpNewPass" placeholder="Min 8 characters" class="form-input" style="text-align:center" onkeypress="if(event.key==='Enter')document.getElementById('fpConfirmPass').focus()">
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input type="password" id="fpConfirmPass" placeholder="Re-enter new password" class="form-input" style="text-align:center" onkeypress="if(event.key==='Enter')fpResetPassword()">
+                    </div>
+                    <div id="fpResetMsg" style="font-size:10px;color:var(--text3);margin-bottom:8px"></div>
+                    <button class="btn-primary full" onclick="fpResetPassword()" id="fpResetBtn">Reset Password</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- ADMIN LOGIN MODAL -->
     <div class="modal-overlay hidden" id="adminLoginModal" onclick="closeModal('adminLoginModal')">
         <div class="modal admin-modal" onclick="event.stopPropagation()">
@@ -635,6 +684,7 @@
                     <input type="password" id="adminPassword" placeholder="Enter password" class="form-input" onkeypress="if(event.key==='Enter')adminLogin()">
                 </div>
                 <button class="btn-primary full" onclick="adminLogin()" id="adminLoginBtn">Login</button>
+                <div style="text-align:center;margin-top:8px"><a href="#" onclick="closeModal('adminLoginModal');showForgotPasswordModal('admin')" style="font-size:11px;color:var(--violet);text-decoration:none">Forgot Password?</a></div>
             </div>
         </div>
     </div>
@@ -716,7 +766,7 @@
     <div class="toast" id="toast"></div>
 
     <script src="js/faq.js?v=8"></script>
-    <script src="js/app.js?v=14"></script>
+    <script src="js/app.js?v=15"></script>
     <script>if('serviceWorker'in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{})}</script>
 </body>
 
