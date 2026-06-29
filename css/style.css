@@ -466,6 +466,77 @@ body {
     transition: color .2s
 }
 
+.seasonal-strip {
+    max-width: 1280px;
+    margin: 8px auto;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all .3s
+}
+
+.seasonal-strip-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    color: #fff
+}
+
+.seasonal-strip-left {
+    display: flex;
+    align-items: center;
+    gap: 12px
+}
+
+.seasonal-strip-icon {
+    font-size: 2rem
+}
+
+.seasonal-strip-badge {
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.2
+}
+
+.seasonal-strip-name {
+    font-size: 11px;
+    opacity: .9
+}
+
+.seasonal-strip-right {
+    display: flex;
+    align-items: center;
+    gap: 8px
+}
+
+.seasonal-strip-disc-label {
+    font-size: 11px;
+    opacity: .8
+}
+
+.seasonal-strip-disc {
+    font-size: 24px;
+    font-weight: 800;
+    line-height: 1
+}
+
+.seasonal-strip-cta {
+    background: rgba(255,255,255,.2);
+    border: 1px solid rgba(255,255,255,.4);
+    color: #fff;
+    padding: 6px 16px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background .2s
+}
+
+.seasonal-strip-cta:hover {
+    background: rgba(255,255,255,.3)
+}
+
 .banner-section {
     position: relative;
     max-width: 1280px;

@@ -211,6 +211,10 @@
                 <div class="cat-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V8a2 2 0 012-2h12a2 2 0 012 2v12"/><path d="M2 20h20"/><path d="M8 14h8"/></svg></div>
                 <span>Furniture</span>
             </div>
+            <div class="cat-item" id="seasonCatBtn" onclick="filterSeason()" style="display:none">
+                <div class="cat-icon" id="seasonCatIcon"></div>
+                <span id="seasonCatLabel">Seasonal Offer</span>
+            </div>
         </div>
     </div>
 
@@ -279,6 +283,25 @@
                         <div class="ai-strip-item"><span>🛡️</span> 100% Secure</div>
                         <div class="ai-strip-item"><span>🚚</span> Free Shipping ₹500+</div>
                         <div class="ai-strip-item"><span>↩️</span> Easy Returns</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEASONAL STRIP -->
+            <div class="seasonal-strip" id="seasonalStrip" style="display:none">
+                <div class="seasonal-strip-inner">
+                    <div class="seasonal-strip-left">
+                        <span class="seasonal-strip-icon" id="seasonStripEmoji"></span>
+                        <div>
+                            <div class="seasonal-strip-badge" id="seasonStripBadge"></div>
+                            <div class="seasonal-strip-name" id="seasonStripName"></div>
+                        </div>
+                    </div>
+                    <div class="seasonal-strip-right">
+                        <span class="seasonal-strip-disc-label">Up to</span>
+                        <span class="seasonal-strip-disc" id="seasonStripDisc">0</span>
+                        <span class="seasonal-strip-disc-label">% OFF</span>
+                        <button class="seasonal-strip-cta" onclick="filterSeason()">Shop Now →</button>
                     </div>
                 </div>
             </div>

@@ -406,7 +406,7 @@ let rows=PRODUCTS.slice(0,10).map(p=>{let hist=[120,145,132,158,142,p.sales];let
 el.innerHTML=sidebar+'<h2>📈 Demand Forecast</h2><p style="font-size:12px;color:var(--text2);margin-bottom:14px">AI predictions using Weighted Moving Average + Trend</p>'+rows+'</div></div>'}
 else if(sec==='autopilot'){
 let rows=PRODUCTS.map(p=>{let hist=[120,145,132,158,142,p.sales];let dp=demandPrediction(hist,3);let reorder=p.stock<Math.round(dp.predicted*0.3);return'<div class="admin-row"><span>'+(reorder?'⚠️ ':'')+p.name+'</span><span>Stock: '+p.stock+'</span><span>Predicted: '+dp.predicted+'</span><span style="color:'+(reorder?'var(--amber)':'var(--green)')+'">'+(reorder?'Reorder Needed':'OK')+'</span></div>'}).join('');
-el.innerHTML=sidebar+'<h2>🤖 AI Autopilot</h2><p style="font-size:12px;color:var(--text2);margin-bottom:14px">Automated inventory replenishment based on demand predictions</p>'+rows+'</div></div>'}
+el.innerHTML=sidebar+'<h2>🤖 Automation Engine</h2><p style="font-size:12px;color:var(--text2);margin-bottom:14px">Automated inventory replenishment based on demand predictions</p>'+rows+'</div></div>'}
 else if(sec==='products'){
 el.innerHTML=sidebar+'<h2>📦 Products ('+PRODUCTS.length+')</h2>'+PRODUCTS.map(p=>'<div class="admin-row"><span>#'+p.id+'</span><span>'+p.name+'</span><span style="color:var(--text2)">'+p.cat+'</span><span>₹'+p.price.toLocaleString()+'</span><span style="font-size:10px;color:var(--text3)">'+p.stock+' in stock</span></div>').join('')+'</div></div>'}
 else if(sec==='orders'){
