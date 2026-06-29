@@ -262,11 +262,21 @@
                                 →</button>
                         </div>
                     </div>
+                    <div class="banner-slide seasonal-slide" id="seasonalBannerSlide" style="display:none">
+                        <div class="banner-content">
+                            <div class="banner-badge" id="seasonalBannerBadge"></div>
+                            <h1 id="seasonalBannerTitle"></h1>
+                            <p id="seasonalBannerSub"></p>
+                            <p class="banner-sub" id="seasonalBannerDesc"></p>
+                            <button class="banner-cta" id="seasonalBannerBtn" onclick="filterSeason()">Shop Sale →</button>
+                        </div>
+                    </div>
                 </div>
                 <div class="slider-dots" id="sliderDots">
                     <span class="dot active" onclick="goToSlide(0)"></span>
                     <span class="dot" onclick="goToSlide(1)"></span>
                     <span class="dot" onclick="goToSlide(2)"></span>
+                    <span class="dot" id="seasonalDot" onclick="goToSlide(3)" style="display:none"></span>
                 </div>
                 <button class="slider-prev" onclick="prevSlide()">&#10094;</button>
                 <button class="slider-next" onclick="nextSlide()">&#10095;</button>

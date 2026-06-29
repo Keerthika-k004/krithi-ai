@@ -117,6 +117,15 @@ function initSeasonUI(){
     document.getElementById('seasonStripEmoji').textContent=s.icon;
     document.getElementById('seasonStripName').textContent=s.name;
     document.getElementById('seasonStripDisc').textContent=s.discount;}
+  let slide=document.getElementById('seasonalBannerSlide');
+  if(slide){
+    slide.style.display='';
+    slide.style.background=s.bg;
+    document.getElementById('seasonalBannerBadge').innerHTML=s.emoji+' '+s.offer;
+    document.getElementById('seasonalBannerTitle').textContent=s.name;
+    document.getElementById('seasonalBannerSub').textContent='Up to '+s.discount+'% OFF';
+    document.getElementById('seasonalBannerDesc').textContent='Limited period sale on '+s.categories.join(', ')+' — Grab the best deals!';
+    document.getElementById('seasonalDot').style.display='';}
 }
 function filterSeason(){
   currentBrand=null;
