@@ -1492,7 +1492,7 @@ function dismissInstallBanner(){
 function init(){
 loadState();loadAdminState();
 seedReviews();
-fetch(API_BASE+'/api/products').then(r=>r.json()).then(data=>{
+fetch(API_BASE+'/api/products?limit=500').then(r=>r.json()).then(data=>{
   if(data&&data.products&&data.products.length){
     PRODUCTS.length=0;data.products.forEach((p,i)=>{PRODUCTS.push({id:i+1,...p,_id:undefined,__v:undefined})});
     renderDeals();renderProducts(getFilteredProducts());renderWishlist();renderOrdersList()}
