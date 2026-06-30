@@ -10,7 +10,11 @@ const productSchema = new mongoose.Schema({
   sales: { type: Number, default: 0 },
   stock: { type: Number, default: 10 },
   brand: String,
-  badge: String
+  badge: String,
+  mrp: { type: Number, default: 0 },
+  discount: { type: Number, default: 0 },
+  features: [String],
+  reviewsCount: { type: Number, default: 0 }
 }, { timestamps: true });
 
 productSchema.index({ cat: 1 });
