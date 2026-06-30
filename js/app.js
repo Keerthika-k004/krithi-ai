@@ -29,6 +29,7 @@ let currentPage=0;
 const PAGE_SIZE=8;
 let currentCategory="all";
 let currentSort="relevance";
+let currentBrand=null;
 let currentUser=null;
 let currentSlide=0;
 let slideInterval=null;
