@@ -239,7 +239,7 @@ renderRecentViews()}
 
 function renderRecentViews(){
 let existing=document.getElementById('recentSection');if(existing)existing.remove();
-if(currentCategory!=='all'||!recentView.length)return;
+if(!recentView.length)return;
 let el=document.querySelector('.products-section');
 let items=recentView.map(id=>PRODUCTS.find(p=>p.id===id)).filter(Boolean);
 if(!items.length)return;
