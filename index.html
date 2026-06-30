@@ -72,7 +72,7 @@
                             <span>New customer?</span> <a href="#" onclick="showModal('registerModal')"
                                 class="signup-link">Sign Up</a>
                         </div>
-                        <a href="#" onclick="showModal('loginModal')" class="dropdown-item"><svg width="16" height="16"
+                        <a href="#" onclick="showProfile()" class="dropdown-item"><svg width="16" height="16"
                                 fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                                 <circle cx="12" cy="7" r="4" />
@@ -87,18 +87,18 @@
                                 <path
                                     d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                             </svg> Wishlist</a>
-                        <a href="#" class="dropdown-item loyalty"><svg width="16" height="16" fill="none"
+                        <a href="#" onclick="showSection('plus')" class="dropdown-item loyalty"><svg width="16" height="16" fill="none"
                                 stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                 <polygon
                                     points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                             </svg> KRITHI Plus Zone</a>
-                        <a href="#" class="dropdown-item"><svg width="16" height="16" fill="none" stroke="currentColor"
+                        <a href="#" onclick="showSection('rewards')" class="dropdown-item"><svg width="16" height="16" fill="none" stroke="currentColor"
                                 stroke-width="2" viewBox="0 0 24 24">
                                 <rect width="18" height="18" x="3" y="3" rx="2" />
                                 <path d="M9 9h.01M15 9h.01M9 15h.01M15 15h.01" />
                             </svg> Rewards</a>
                         <div class="dropdown-divider"></div>
-                        <a href="#support" class="dropdown-item"><svg width="16" height="16" fill="none"
+                        <a href="#" onclick="openChat();return false;" class="dropdown-item"><svg width="16" height="16" fill="none"
                                 stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                 <path
                                     d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.15 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.06 2h3a2 2 0 0 1 2 1.72v.1a16 16 0 0 0 .87 3.41 2 2 0 0 1-.45 2.11L7.91 10.6a16 16 0 0 0 6.4 6.4l1.36-.5a2 2 0 0 1 2.11.45 16 16 0 0 0 3.41.87 2 2 0 0 1 1.81 2z" />
@@ -471,6 +471,24 @@
         <!-- ADMIN SECTION -->
         <section id="adminSection" class="hidden">
             <div id="adminContent"></div>
+        </section>
+
+        <!-- PROFILE SECTION -->
+        <section id="profileSection" class="hidden">
+            <div class="page-header">
+                <h2>👤 My Profile</h2>
+            </div>
+            <div id="profileContent" class="profile-container"></div>
+        </section>
+
+        <!-- KRITHI PLUS ZONE -->
+        <section id="plusSection" class="hidden">
+            <div id="plusContent"></div>
+        </section>
+
+        <!-- REWARDS SECTION -->
+        <section id="rewardsSection" class="hidden">
+            <div id="rewardsContent"></div>
         </section>
     </main>
 

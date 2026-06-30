@@ -1162,15 +1162,56 @@ function resetSlideInterval(){clearInterval(slideInterval);slideInterval=setInte
 
 // ---- Section Nav ----
 function showSection(name){
-document.querySelectorAll('#homeSection,#cartSection,#wishlistSection,#ordersSection,#productDetailSection,#checkoutSection,#adminSection').forEach(s=>s.classList.add('hidden'));
+document.querySelectorAll('#homeSection,#cartSection,#wishlistSection,#ordersSection,#productDetailSection,#checkoutSection,#adminSection,#profileSection,#plusSection,#rewardsSection').forEach(s=>s.classList.add('hidden'));
 if(name==='home')document.getElementById('homeSection').classList.remove('hidden');
 else if(name==='cart'){document.getElementById('cartSection').classList.remove('hidden');renderCart()}
 else if(name==='wishlist'){document.getElementById('wishlistSection').classList.remove('hidden');renderWishlist()}
 else if(name==='orders'){document.getElementById('ordersSection').classList.remove('hidden');renderOrdersList()}
 else if(name==='productDetail')document.getElementById('productDetailSection').classList.remove('hidden');
 else if(name==='checkout')document.getElementById('checkoutSection').classList.remove('hidden');
-else if(name==='admin')document.getElementById('adminSection').classList.remove('hidden')}
+else if(name==='admin')document.getElementById('adminSection').classList.remove('hidden');
+else if(name==='profile'){document.getElementById('profileSection').classList.remove('hidden');renderProfile()}
+else if(name==='plus'){document.getElementById('plusSection').classList.remove('hidden');renderPlusZone()}
+else if(name==='rewards'){document.getElementById('rewardsSection').classList.remove('hidden');renderRewards()}}
 
+function showProfile(){
+  if(currentUser){showSection('profile')}
+  else{showModal('loginModal')}
+}
+function renderProfile(){
+  let u=currentUser||{name:'Guest',email:'guest@krithi.ai',phone:'N/A'};
+  let orderCount=registeredUsers.find(x=>x.email===u.email)?.orderCount||0;
+  let totalSpent=registeredUsers.find(x=>x.email===u.email)?.totalSpent||0;
+  document.getElementById('profileContent').innerHTML=
+  '<div class="profile-card"><div class="profile-avatar">'+(u.name?u.name.charAt(0).toUpperCase():'G')+'</div>'+
+  '<h3>'+u.name+'</h3><p class="profile-email">'+u.email+'</p><p class="profile-phone">📞 '+u.phone+'</p>'+
+  '<div class="profile-stats"><div class="profile-stat"><strong>'+orderCount+'</strong><span>Orders</span></div>'+
+  '<div class="profile-stat"><strong>₹'+(totalSpent).toLocaleString()+'</strong><span>Total Spent</span></div>'+
+  '<div class="profile-stat"><strong>'+(currentUser?'Online':'Offline')+'</strong><span>Status</span></div></div></div>'
+}
+function renderPlusZone(){
+  document.getElementById('plusContent').innerHTML=
+  '<div class="plus-hero"><div class="plus-badge">KRITHI<span>Plus</span></div>'+
+  '<h2>Unlock Premium Shopping Experience</h2><p>Free shipping • Early access • Exclusive deals • 24x7 priority support</p>'+
+  '<button class="btn-primary" onclick="toast(\'🎉 Welcome to KRITHI Plus! Free trial activated.\')">Start Free Trial →</button></div>'+
+  '<div class="plus-features"><div class="plus-card"><span>🚚</span><h4>Free Delivery</h4><p>On all orders, no minimum</p></div>'+
+  '<div class="plus-card"><span>🎯</span><h4>Early Access</h4><p>Sale access 24hrs before everyone</p></div>'+
+  '<div class="plus-card"><span>⭐</span><h4>Extra 5% Off</h4><p>On every purchase</p></div>'+
+  '<div class="plus-card"><span>🎬</span><h4>KRITHI Originals</h4><p>Exclusive content & events</p></div></div>'
+}
+function renderRewards(){
+  let points=Math.floor((registeredUsers.find(x=>x.email===currentUser?.email)?.totalSpent||0)/100);
+  let tier=points>500?'🥇 Gold':points>200?'🥈 Silver':'🥉 Bronze';
+  document.getElementById('rewardsContent').innerHTML=
+  '<div class="rewards-header"><div class="rewards-tier">'+tier+'</div><h2>KRITHI Rewards</h2><p>Earn points on every purchase</p></div>'+
+  '<div class="rewards-points"><span class="points-value">'+points+'</span><span class="points-label">Points Earned</span>'+
+  '<div class="rewards-bar"><div class="rewards-fill" style="width:'+Math.min(points/5,100)+'%"></div></div>'+
+  '<p class="points-next">'+(500-points>0?'Next tier in '+(500-points)+' more points':'🥇 You are at the top tier!')+'</p></div>'+
+  '<div class="rewards-perks"><h3>Available Perks</h3>'+
+  '<div class="perk-card"><span>🎫</span><div><strong>₹50 Coupon</strong><p>Redeem 100 points</p></div><button onclick="toast(\'🎫 Coupon applied!\')" class="perk-btn"'+(points<100?' disabled':'')+'>Redeem</button></div>'+
+  '<div class="perk-card"><span>🚚</span><div><strong>Free Shipping</strong><p>Redeem 50 points</p></div><button onclick="toast(\'🚚 Free shipping activated!\')" class="perk-btn"'+(points<50?' disabled':'')+'>Redeem</button></div>'+
+  '<div class="perk-card"><span>🏷️</span><div><strong>10% Off Coupon</strong><p>Redeem 250 points</p></div><button onclick="toast(\'🏷️ 10% off coupon applied!\')" class="perk-btn"'+(points<250?' disabled':'')+'>Redeem</button></div></div>'
+}
 // ---- Toast ----
 function toast(m){
 let el=document.getElementById('toast');el.textContent=m;el.classList.add('show');
