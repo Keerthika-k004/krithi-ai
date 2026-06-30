@@ -238,9 +238,9 @@ if(btn)btn.style.display=end>=items.length?'none':'block';
 renderRecentViews()}
 
 function renderRecentViews(){
+let existing=document.getElementById('recentSection');if(existing)existing.remove();
 if(currentCategory!=='all'||!recentView.length)return;
 let el=document.querySelector('.products-section');
-let existing=document.getElementById('recentSection');if(existing)existing.remove();
 let items=recentView.map(id=>PRODUCTS.find(p=>p.id===id)).filter(Boolean);
 if(!items.length)return;
 let sec=document.createElement('div');sec.id='recentSection';sec.style.cssText='margin-top:20px';
