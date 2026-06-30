@@ -1162,7 +1162,7 @@ function resetSlideInterval(){clearInterval(slideInterval);slideInterval=setInte
 
 // ---- Section Nav ----
 function showSection(name){
-document.querySelectorAll('#homeSection,#cartSection,#wishlistSection,#ordersSection,#productDetailSection,#checkoutSection,#adminSection,#profileSection,#plusSection,#rewardsSection').forEach(s=>s.classList.add('hidden'));
+document.querySelectorAll('#homeSection,#cartSection,#wishlistSection,#ordersSection,#productDetailSection,#checkoutSection,#adminSection,#profileSection,#plusSection,#rewardsSection,#notificationsSection').forEach(s=>s.classList.add('hidden'));
 if(name==='home')document.getElementById('homeSection').classList.remove('hidden');
 else if(name==='cart'){document.getElementById('cartSection').classList.remove('hidden');renderCart()}
 else if(name==='wishlist'){document.getElementById('wishlistSection').classList.remove('hidden');renderWishlist()}
@@ -1172,8 +1172,21 @@ else if(name==='checkout')document.getElementById('checkoutSection').classList.r
 else if(name==='admin')document.getElementById('adminSection').classList.remove('hidden');
 else if(name==='profile'){document.getElementById('profileSection').classList.remove('hidden');renderProfile()}
 else if(name==='plus'){document.getElementById('plusSection').classList.remove('hidden');renderPlusZone()}
-else if(name==='rewards'){document.getElementById('rewardsSection').classList.remove('hidden');renderRewards()}}
+else if(name==='rewards'){document.getElementById('rewardsSection').classList.remove('hidden');renderRewards()}
+else if(name==='notifications'){document.getElementById('notificationsSection').classList.remove('hidden');renderNotifications()}}
 
+function showSellerModal(){showModal('sellerModal')}
+function showAdvertiseModal(){showModal('advertiseModal')}
+function renderNotifications(){
+  let prefs=[{icon:'🔔',label:'Order Updates',desc:'Tracking, delivery, and status changes',on:true},
+  {icon:'🏷️',label:'Deals & Offers',desc:'Personalized discounts and flash sales',on:true},
+  {icon:'⭐',label:'Recommendations',desc:'AI-curated product suggestions',on:true},
+  {icon:'📣',label:'Newsletter',desc:'Weekly KRITHI AI updates',on:false},
+  {icon:'🤖',label:'KRITHI Care',desc:'Chat and support notifications',on:true}];
+  document.getElementById('notificationsContent').innerHTML=
+  '<div class="page-header"><h2>🔔 Notification Settings</h2></div>'+
+  '<div class="notif-container">'+prefs.map((p,i)=>'<div class="notif-card"><div class="notif-left"><span class="notif-icon">'+p.icon+'</span><div><strong>'+p.label+'</strong><p>'+p.desc+'</p></div></div><label class="toggle"><input type="checkbox" '+(p.on?'checked':'')+' onchange="toast(\''+p.label+' '+(p.on?'disabled':'enabled')+'\')"><span class="toggle-slider"></span></label></div>').join('')+'</div>'
+}
 function showProfile(){
   if(currentUser){showSection('profile')}
   else{showModal('loginModal')}
