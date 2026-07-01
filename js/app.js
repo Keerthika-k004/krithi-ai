@@ -455,7 +455,7 @@ name.value='';email.value='';msg.value=''}
 const COUPONS={KRITHI10:{disc:10,min:500,msg:'10% off on ₹500+'},WELCOME100:{disc:100,min:0,msg:'₹100 off — Welcome!'},FREESHIP:{disc:0,min:0,msg:'Free Shipping',freeShip:true},SAVE50:{disc:50,min:200,msg:'₹50 off on ₹200+'}};
 let appliedCoupon=null;
 let paymentMethod='card';
-const UPI_QR_ID='9544172669@upi';
+const UPI_QR_ID='keerthikak004@oksbi';
 const UPI_MERCHANT='KRITHI AI';
 
 function applyCoupon(){
