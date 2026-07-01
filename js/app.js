@@ -339,14 +339,34 @@ fl.innerHTML='<div style="display:flex;align-items:center;gap:8px;margin-bottom:
 items.map(p=>'<span style="color:var(--text2);font-size:10px">• '+p.name.substring(0,20)+'</span>').join('<br>');
 document.body.appendChild(fl)}
 
+function generateProsCons(p){
+let pList=[],cList=[];
+if(p.rating>=4.5)pList.push('⭐ High rating ('+p.rating+'/5)');
+if(p.sales>500)pList.push('🔥 Top seller — '+p.sales.toLocaleString()+' sold');
+if(p.discount>20)pList.push('🏷️ '+p.discount+'% off — bargain');
+if(p.stock>100)pList.push('📦 Well stocked');
+if(p.price<500)pList.push('💰 Budget-friendly');
+if(p.price<100&&p.stock>50)pList.push('💎 Great value');
+if(p.stock<10)cList.push('⚠️ Low stock — only '+p.stock+' left');
+if(p.rating<3.5)cList.push('⚠️ Below avg rating ('+p.rating+'/5)');
+if(p.price>50000)cList.push('💎 Premium pricing');
+if(p.sales<50)cList.push('📉 Low sales volume');
+if(!pList.length)pList.push('✅ Decent product');
+if(!cList.length)cList.push('✅ No major concerns');
+return{pList,cList}}
+
 function showCompare(){
 let items=compareList.map(id=>PRODUCTS.find(p=>p.id===id)).filter(Boolean);
 if(items.length<2){toast('Add at least 2 products to compare');return}
 let fields=[{k:'price',l:'Price'},{k:'rating',l:'Rating'},{k:'sales',l:'Sold'},{k:'stock',l:'Stock'},{k:'brand',l:'Brand'},{k:'cat',l:'Category'}];
-let html='<div style="position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:4000;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)" onclick="closeCompare(event)"><div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:24px;max-width:800px;width:95%;max-height:80vh;overflow-y:auto" onclick="event.stopPropagation()"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><h3 style="font-family:Outfit,sans-serif;font-size:1.1rem">📊 Compare Products</h3><button onclick="closeCompare(event)" style="background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer">✕</button></div><div style="display:grid;grid-template-columns:120px repeat('+items.length+',1fr);gap:1px;background:var(--border);border-radius:8px;overflow:hidden">'+
-[['<span style="font-weight:600">Product</span>',...items.map(p=>'<img src="'+p.img+'" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:4px" alt="">')],
+let best=items.reduce((b,p)=>{let s=(p.rating*10)+(p.sales/1000)-(p.price/1000)+(p.stock>0?5:-10);return s>b.score?{p,score:s}:b},{p:items[0],score:-Infinity});
+let html='<div style="position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:4000;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)" onclick="closeCompare(event)"><div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:24px;max-width:900px;width:95%;max-height:85vh;overflow-y:auto" onclick="event.stopPropagation()"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><h3 style="font-family:Outfit,sans-serif;font-size:1.1rem">📊 Compare Products</h3><button onclick="closeCompare(event)" style="background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer">✕</button></div><div style="display:grid;grid-template-columns:120px repeat('+items.length+',1fr);gap:1px;background:var(--border);border-radius:8px;overflow:hidden">'+
+[['<span style="font-weight:600">Product</span>',...items.map(p=>'<div><img src="'+p.img+'" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:6px" alt=""><div style="font-size:10px;margin-top:4px;font-weight:600">'+p.name+'</div></div>')],
+['<span style="font-weight:600;color:var(--violet)">✨ Best Pick</span>',...items.map(p=>'<div style="font-weight:700;font-size:14px;color:'+(p.id===best.p.id?'var(--green)':'var(--text3)')+'">'+(p.id===best.p.id?'✅ Recommended':'—')+'</div>')],
 ...fields.map(f=>['<span style="font-weight:600">'+f.l+'</span>',...items.map(p=>f.k==='price'?'₹'+p[f.k].toLocaleString():p[f.k])]),
-['<span style="font-weight:600">Buy</span>',...items.map(p=>'<button onclick="addToCart('+p.id+');toast(\'Added '+p.name+'\')" style="background:var(--violet);border:none;color:#fff;padding:6px 10px;border-radius:5px;cursor:pointer;font-size:10px;font-family:Inter,sans-serif">+ Cart</button>')]
+['<span style="font-weight:600;color:var(--green)">✅ Pros</span>',...items.map(p=>'<div style="font-size:10px;line-height:1.7;text-align:left">'+generateProsCons(p).pList.join('<br>')+'</div>')],
+['<span style="font-weight:600;color:var(--red)">⚠️ Cons</span>',...items.map(p=>'<div style="font-size:10px;line-height:1.7;text-align:left">'+generateProsCons(p).cList.join('<br>')+'</div>')],
+['<span style="font-weight:600">Buy</span>',...items.map(p=>'<button onclick="addToCart('+p.id+');toast(\'Added '+p.name+'\')" style="background:var(--violet);border:none;color:#fff;padding:6px 12px;border-radius:5px;cursor:pointer;font-size:11px;font-family:Inter,sans-serif;font-weight:600">+ Cart</button>')]
 ].map(row=>row.map((c,i)=>'<div style="background:var(--bg3);padding:10px;font-size:12px;text-align:'+(i===0?'left':'center')+'">'+c+'</div>').join('')).join('')+'</div></div></div>';
 let d=document.createElement('div');d.id='compareModal';d.innerHTML=html;
 document.body.appendChild(d)}
