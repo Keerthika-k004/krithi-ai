@@ -454,6 +454,9 @@ name.value='';email.value='';msg.value=''}
 // ---- Coupons ----
 const COUPONS={KRITHI10:{disc:10,min:500,msg:'10% off on ₹500+'},WELCOME100:{disc:100,min:0,msg:'₹100 off — Welcome!'},FREESHIP:{disc:0,min:0,msg:'Free Shipping',freeShip:true},SAVE50:{disc:50,min:200,msg:'₹50 off on ₹200+'}};
 let appliedCoupon=null;
+let paymentMethod='card';
+const UPI_QR_ID='9544172669@upi';
+const UPI_MERCHANT='KRITHI AI';
 
 function applyCoupon(){
 let inp=document.getElementById('couponInput');if(!inp)return;
@@ -480,7 +483,7 @@ el.innerHTML='<div class="checkout-form"><h3 style="font-size:1rem;margin-bottom
 function checkoutPayment(){
 document.getElementById('step1Tab').className='step done';
 document.getElementById('step2Tab').className='step active';
-document.getElementById('checkoutContent').innerHTML='<div class="checkout-form"><h3 style="font-size:1rem;margin-bottom:6px">Payment Method</h3><div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px"><label style="display:flex;align-items:center;gap:8px;padding:12px;border:1px solid var(--border);border-radius:8px;cursor:pointer"><input type="radio" name="pay" checked> 💳 Credit Card (**** 4242)</label><label style="display:flex;align-items:center;gap:8px;padding:12px;border:1px solid var(--border);border-radius:8px;cursor:pointer"><input type="radio" name="pay"> 📱 UPI (demo@krithi)</label><label style="display:flex;align-items:center;gap:8px;padding:12px;border:1px solid var(--border);border-radius:8px;cursor:pointer"><input type="radio" name="pay"> 💵 Cash on Delivery</label></div><button class="checkout-btn" onclick="checkoutConfirm()">Continue to Confirm</button></div>'}
+document.getElementById('checkoutContent').innerHTML='<div class="checkout-form"><h3 style="font-size:1rem;margin-bottom:6px">Payment Method</h3><div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px"><label class="pay-option" onclick="paymentMethod=\'card\'" style="display:flex;align-items:center;gap:8px;padding:12px;border:2px solid var(--border);border-radius:8px;cursor:pointer"> <input type="radio" name="pay" checked> 💳 Credit Card (**** 4242)</label><label class="pay-option" onclick="paymentMethod=\'upi\'" style="display:flex;align-items:center;gap:8px;padding:12px;border:2px solid var(--border);border-radius:8px;cursor:pointer"> <input type="radio" name="pay"> 📱 UPI (demo@krithi)</label><label class="pay-option" onclick="paymentMethod=\'razorpay\'" style="display:flex;align-items:center;gap:8px;padding:12px;border:2px solid var(--border);border-radius:8px;cursor:pointer"> <input type="radio" name="pay"> 🔗 Razorpay (Cards / UPI / Wallets / NetBanking)</label><label class="pay-option" onclick="paymentMethod=\'qr\'" style="display:flex;align-items:center;gap:8px;padding:12px;border:2px solid var(--border);border-radius:8px;cursor:pointer"> <input type="radio" name="pay"> 📷 Pay via UPI QR (PhonePe / GPay / Paytm)</label><label class="pay-option" onclick="paymentMethod=\'cod\'" style="display:flex;align-items:center;gap:8px;padding:12px;border:2px solid var(--border);border-radius:8px;cursor:pointer"> <input type="radio" name="pay"> 💵 Cash on Delivery</label></div><button class="checkout-btn" onclick="checkoutConfirm()">Continue to Confirm</button></div>'}
 
 function checkoutConfirm(){
 document.getElementById('step2Tab').className='step done';
@@ -491,9 +494,16 @@ if(c.freeShip)ship=0;else disc=c.disc;
 if(c.disc>0)disc=Math.min(total*(c.disc/100),c.disc)}
 total=total-disc+ship;
 let oid='KRITHI-'+(1000+Math.floor(Math.random()*9000));
-document.getElementById('checkoutContent').innerHTML='<div class="checkout-form"><h3 style="font-size:1rem;margin-bottom:6px">Confirm Order</h3><div style="background:var(--bg3);padding:14px;border-radius:8px;margin-bottom:12px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Order ID</span><span style="font-family:monospace;color:var(--violet)">#'+oid+'</span></div><div style="display:flex;justify-content:space-between;font-size:12px"><span>Total Amount</span><span style="font-weight:700;font-size:16px">₹'+total.toLocaleString()+'</span></div></div><div style="background:var(--bg3);padding:14px;border-radius:8px;margin-bottom:12px"><div style="font-size:11px;color:var(--text2);margin-bottom:4px">Delivering to:</div><div style="font-size:12px">Demo User, 123 KRITHI Lane, Chennai</div></div><button class="checkout-btn" onclick="placeOrder(\''+oid+'\')">Place Order ✅</button></div>'}
+let payLabels={card:'💳 Credit Card (**** 4242)',upi:'📱 UPI (demo@krithi)',razorpay:'🔗 Razorpay (Cards/UPI/Wallets)',qr:'📷 UPI QR (PhonePe/GPay/Paytm)',cod:'💵 Cash on Delivery'};
+let payLabel=payLabels[paymentMethod]||'💳 Credit Card';
+document.getElementById('checkoutContent').innerHTML='<div class="checkout-form"><h3 style="font-size:1rem;margin-bottom:6px">Confirm Order</h3><div style="background:var(--bg3);padding:14px;border-radius:8px;margin-bottom:12px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Order ID</span><span style="font-family:monospace;color:var(--violet)">#'+oid+'</span></div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Payment</span><span style="font-size:11px">'+payLabel+'</span></div><div style="display:flex;justify-content:space-between;font-size:12px"><span>Total Amount</span><span style="font-weight:700;font-size:16px">₹'+total.toLocaleString()+'</span></div></div><div style="background:var(--bg3);padding:14px;border-radius:8px;margin-bottom:12px"><div style="font-size:11px;color:var(--text2);margin-bottom:4px">Delivering to:</div><div style="font-size:12px">Demo User, 123 KRITHI Lane, Chennai</div></div><button class="checkout-btn" onclick="placeOrder(\''+oid+'\')">Place Order ✅</button></div>'}
 
 function placeOrder(oid){
+if(paymentMethod==='razorpay'){initRazorpayPayment(oid);return}
+if(paymentMethod==='qr'){showQRPayment(oid);return}
+finalizeOrder(oid)}
+
+function finalizeOrder(oid){
 let items=cart.map(c=>{let p=PRODUCTS.find(x=>x.id===c.id);return p?p.name:''}).filter(Boolean);
 let total=getCartTotal();let disc=0;let ship=total>=500?0:40;
 if(appliedCoupon){let c=COUPONS[appliedCoupon];
@@ -506,6 +516,32 @@ saveState();
 toast('Order placed! ID: '+oid);
 showSection('home');
 fetch(API_BASE+'/api/orders',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({items:items.map(n=>{let p=PRODUCTS.find(x=>x.name===n);return{product:String(p?p.id:''),name:n,price:p?p.price:0,qty:1}}),total:order.total,status:'Processing',user:currentUser?currentUser.name:'Guest'})}).catch(()=>{})}
+
+function initRazorpayPayment(oid){
+let total=getCartTotal();let disc=0;let ship=total>=500?0:40;
+if(appliedCoupon){let c=COUPONS[appliedCoupon];
+if(c.freeShip)ship=0;else disc=c.disc;
+if(c.disc>0)disc=Math.min(total*(c.disc/100),c.disc)}
+let amount=total-disc+ship;
+fetch(API_BASE+'/api/payment/create-order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount,receipt:oid})})
+.then(r=>r.json()).then(order=>{
+if(!order.id){toast('Payment failed: could not create order');return}
+let options={key:RAZORPAY_KEY_ID,amount:order.amount,currency:order.currency,name:'KRITHI AI',description:'Order '+oid,order_id:order.id,image:'https://keerthika-k004.github.io/krithi-ai/icon-192.png',handler:function(response){fetch(API_BASE+'/api/payment/verify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({razorpay_order_id:response.razorpay_order_id,razorpay_payment_id:response.razorpay_payment_id,razorpay_signature:response.razorpay_signature})}).then(r=>r.json()).then(v=>{if(v.status==='ok'){toast('Payment successful!');finalizeOrder(oid)}else toast('Payment verification failed')}).catch(()=>finalizeOrder(oid))},modal:{ondismiss:function(){toast('Payment cancelled')}}};
+let rzp=new Razorpay(options);rzp.open()}).catch(()=>{toast('Could not connect to payment server')})}
+
+function showQRPayment(oid){
+let total=getCartTotal();let disc=0;let ship=total>=500?0:40;
+if(appliedCoupon){let c=COUPONS[appliedCoupon];
+if(c.freeShip)ship=0;else disc=c.disc;
+if(c.disc>0)disc=Math.min(total*(c.disc/100),c.disc)}
+let amount=total-disc+ship;
+let upiLink='upi://pay?pa='+UPI_QR_ID+'&pn='+encodeURIComponent(UPI_MERCHANT)+'&am='+amount+'&cu=INR&tn='+encodeURIComponent('Order '+oid);
+let qrUrl='https://api.qrserver.com/v1/create-qr-code/?size=250x250&data='+encodeURIComponent(upiLink);
+let existing=document.getElementById('qrModalOverlay');if(existing)existing.remove();
+let ov=document.createElement('div');ov.id='qrModalOverlay';ov.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:99999;display:flex;align-items:center;justify-content:center';
+ov.onclick=function(e){if(e.target===ov){ov.remove();toast('Payment cancelled')}};
+ov.innerHTML='<div style="background:var(--card);padding:28px;border-radius:16px;text-align:center;max-width:340px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.3)"><h3 style="margin-bottom:4px;font-family:Outfit,sans-serif">Scan to Pay</h3><p style="font-size:12px;color:var(--text2);margin-bottom:12px">Scan with PhonePe / GPay / Paytm</p><img src="'+qrUrl+'" alt="QR Code" style="width:220px;height:220px;border-radius:12px;margin-bottom:12px" crossorigin="anonymous"><div style="font-size:13px;font-weight:600;margin-bottom:4px">Amount: ₹'+amount.toLocaleString()+'</div><div style="font-size:11px;color:var(--text3);margin-bottom:12px">UPI ID: '+UPI_QR_ID+'</div><div style="display:flex;gap:8px;justify-content:center"><button class="btn-primary" onclick="document.getElementById(\'qrModalOverlay\').remove();finalizeOrder(\''+oid+'\')">✅ Paid</button><button class="checkout-btn" style="background:var(--bg2);color:var(--text)" onclick="document.getElementById(\'qrModalOverlay\').remove();toast(\'Payment cancelled\')">Cancel</button></div><p style="font-size:10px;color:var(--text3);margin-top:10px">After payment, click <strong>Paid</strong> to confirm</p></div>';
+document.body.appendChild(ov)}
 
 // ---- Admin ----
 function showAdminPanel(){
@@ -1246,6 +1282,7 @@ if(!e.target.closest('.login-dropdown')&&!e.target.closest('.nav-item')){documen
 // ---- API Detection & Integration ----
 let apiAvailable=false;
 const API_BASE='http://localhost:3000';
+const RAZORPAY_KEY_ID='rzp_test_XXXXXXXXXXXXXXXX';
 
 function checkAPI(){
   fetch(API_BASE+'/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:'ping'})})

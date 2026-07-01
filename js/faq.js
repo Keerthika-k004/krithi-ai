@@ -27,7 +27,7 @@ const FAQ = [
   { q: "Can I pre-order upcoming products?", a: "Yes! Look for the 'Pre-order' badge on upcoming releases. You'll be charged 10% upfront and the remainder on dispatch.", keywords: ["preorder","pre-order","upcoming","future","coming soon","notify"], category: "products" },
 
   // Payments & Pricing
-  { q: "What payment methods do you accept?", a: "We accept Visa, Mastercard, UPI (GPay, PhonePe, Paytm), Net Banking, and Cash on Delivery. EMI options available on select cards.", keywords: ["pay","payment","card","visa","mastercard","upi","cod","method"], category: "payment" },
+  { q: "What payment methods do you accept?", a: "We accept Visa, Mastercard, UPI (GPay, PhonePe, Paytm), Net Banking, Razorpay, and Cash on Delivery. UPI QR also accepted via any UPI app. EMI options available on select cards.", keywords: ["pay","payment","card","visa","mastercard","upi","cod","method","razorpay","qr"], category: "payment" },
   { q: "Is Cash on Delivery available?", a: "Yes! COD is available on orders up to ₹50,000. A small convenience fee of ₹30 applies for COD orders below ₹1000.", keywords: ["cod","cash","delivery","pay on","hand"], category: "payment" },
   { q: "Do you offer EMI?", a: "Yes! EMI is available on orders above ₹3,000 with leading banks — HDFC, ICICI, SBI, Axis. No-cost EMI on select cards.", keywords: ["emi","installment","finance","monthly","no cost"], category: "payment" },
   { q: "How does pricing work with AI?", a: "Our AI analyzes market trends, demand patterns, and competitor pricing using Weighted Moving Average algorithms to ensure you get the best value.", keywords: ["pricing","price","cost","rate","value","afford"], category: "payment" },

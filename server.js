@@ -2,7 +2,13 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const path = require('path');
+const Razorpay = require('razorpay');
 require('dotenv').config({ path: path.join(__dirname, '.env') });
+
+const razorpay = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID || 'rzp_test_XXXXXXXXXXXXXXXX',
+  key_secret: process.env.RAZORPAY_KEY_SECRET || 'XXXXXXXXXXXXXXXXXXXXXXXX',
+});
 
 const Product = require('./models/Product');
 const Order = require('./models/Order');
@@ -27,7 +33,7 @@ mongoose.connect(MONGODB_URI, { serverSelectionTimeoutMS: 5000, connectTimeoutMS
 const FAQ = [
   { q: "How do I track my order?", a: "Go to My Orders and use your tracking ID (KPXXXXIN)." },
   { q: "What is your return policy?", a: "30-day hassle-free returns from delivery. Free pickup." },
-  { q: "What payment methods do you accept?", a: "Visa, Mastercard, UPI, Net Banking, and COD." },
+  { q: "What payment methods do you accept?", a: "Visa, Mastercard, UPI, Net Banking, Razorpay, and COD. UPI QR also accepted via PhonePe, GPay & Paytm." },
   { q: "Can you recommend products?", a: "Our AI uses Collaborative Filtering to personalize recommendations!" },
   { q: "How do I cancel my order?", a: "You can cancel within 1 hour via My Orders." },
   { q: "What is KRITHI AI?", a: "India's AI-powered e-commerce platform with ML-driven shopping." },
@@ -133,6 +139,36 @@ app.get('/api/reviews/:productId', async (req, res) => {
   try {
     const reviews = await Review.find({ product: req.params.productId }).sort({ createdAt: -1 });
     res.json(reviews);
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+app.post('/api/payment/create-order', async (req, res) => {
+  try {
+    const { amount, currency = 'INR', receipt } = req.body;
+    if (!amount) return res.status(400).json({ error: 'Amount is required' });
+    const options = {
+      amount: Math.round(amount * 100),
+      currency,
+      receipt: receipt || 'rcpt_' + Date.now(),
+    };
+    const order = await razorpay.orders.create(options);
+    res.json(order);
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+app.post('/api/payment/verify', (req, res) => {
+  try {
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+    if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature)
+      return res.status(400).json({ error: 'Missing payment details' });
+    const crypto = require('crypto');
+    const hmac = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET || '');
+    hmac.update(razorpay_order_id + '|' + razorpay_payment_id);
+    const digest = hmac.digest('hex');
+    if (digest === razorpay_signature)
+      res.json({ status: 'ok', message: 'Payment verified successfully' });
+    else
+      res.status(400).json({ status: 'failed', error: 'Invalid signature' });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
